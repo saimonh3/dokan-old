@@ -9,9 +9,9 @@ class Dokan_Tracker extends WeDevs_Insights {
 
     public function __construct() {
 
-        $notice = __( 'Want to help make <strong>Dokan</strong> even more awesome? Allow weDevs to collect non-sensitive diagnostic data and usage information. Enjoy <strong>20% discount</strong> on upgrades and add-on purchase.', 'dokan' );
+        $notice = __( 'Want to help make <strong>Dokan</strong> even more awesome? Allow weDevs to collect non-sensitive diagnostic data and usage information. Enjoy <strong>20% discount</strong> on upgrades and add-on purchase.', 'dokan-lite' );
 
-        parent::__construct( 'dokan', 'Dokan', DOKAN_FILE, $notice );
+        parent::__construct( 'dokan', 'dokan-lite', DOKAN_FILE, $notice );
     }
 
     /**
@@ -35,7 +35,7 @@ class Dokan_Tracker extends WeDevs_Insights {
      *
      * @return boolean
      */
-    private function is_pro() {
+    private function is_pro_exists() {
         if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
             return true;
         }
@@ -52,7 +52,7 @@ class Dokan_Tracker extends WeDevs_Insights {
         $data = array(
             'products' => $this->get_post_count( 'product' ),
             'orders'   => $this->get_order_count(),
-            'is_pro'   => $this->is_pro() ? 'yes' : 'no'
+            'is_pro'   => $this->is_pro_exists() ? 'yes' : 'no'
         );
 
         return $data;

@@ -103,18 +103,18 @@ class Dokan_Template_Orders {
             header( "Content-Disposition: attachment; filename=$filename.csv" );
 
             $headers = array(
-                'order_id'             => __( 'Order No', 'dokan' ),
-                'order_items'          => __( 'Order Items', 'dokan' ),
-                'order_shipping'       => __( 'Shipping method', 'dokan' ),
-                'order_shipping_cost'  => __( 'Shipping Cost', 'dokan' ),
-                'order_payment_method' => __( 'Payment method', 'dokan' ),
-                'order_total'          => __( 'Order Total', 'dokan' ),
-                'order_status'         => __( 'Order Status', 'dokan' ),
-                'order_date'           => __( 'Order Date', 'dokan' ),
-                'customer_name'        => __( 'Customer Name', 'dokan' ),
-                'customer_email'       => __( 'Customer Email', 'dokan' ),
-                'customer_phone'       => __( 'Customer Phone', 'dokan' ),
-                'customer_ip'          => __( 'Customer IP', 'dokan' ),
+                'order_id'             => __( 'Order No', 'dokan-lite' ),
+                'order_items'          => __( 'Order Items', 'dokan-lite' ),
+                'order_shipping'       => __( 'Shipping method', 'dokan-lite' ),
+                'order_shipping_cost'  => __( 'Shipping Cost', 'dokan-lite' ),
+                'order_payment_method' => __( 'Payment method', 'dokan-lite' ),
+                'order_total'          => __( 'Order Total', 'dokan-lite' ),
+                'order_status'         => __( 'Order Status', 'dokan-lite' ),
+                'order_date'           => __( 'Order Date', 'dokan-lite' ),
+                'customer_name'        => __( 'Customer Name', 'dokan-lite' ),
+                'customer_email'       => __( 'Customer Email', 'dokan-lite' ),
+                'customer_phone'       => __( 'Customer Phone', 'dokan-lite' ),
+                'customer_ip'          => __( 'Customer IP', 'dokan-lite' ),
             );
 
             foreach ( (array)$headers as $label ) {
@@ -136,7 +136,7 @@ class Dokan_Template_Orders {
                     $customer_phone   = esc_html( get_post_meta( $order->order_id, '_billing_phone', true ) );
                     $customer_ip      = esc_html( get_post_meta( $order->order_id, '_customer_ip_address', true ) );
                 } else {
-                    $customer_name  = get_post_meta( $order->id, '_billing_first_name', true ). ' '. get_post_meta( $order->id, '_billing_last_name', true ).'(Guest)';
+                    $customer_name  = get_post_meta( $order->order_id, '_billing_first_name', true ). ' '. get_post_meta( $order->order_id, '_billing_last_name', true ).'(Guest)';
                     $customer_email = esc_html( get_post_meta( $order->order_id, '_billing_email', true ) );
                     $customer_phone = esc_html( get_post_meta( $order->order_id, '_billing_phone', true ) );
                     $customer_ip    = esc_html( get_post_meta( $order->order_id, '_customer_ip_address', true ) );
@@ -149,8 +149,8 @@ class Dokan_Template_Orders {
                     'order_shipping_cost'  => $the_order->get_total_shipping(),
                     'order_payment_method' => get_post_meta( $order->order_id, '_payment_method_title', true ),
                     'order_total'          => $the_order->get_total(),
-                    'order_status'         => $statuses[$the_order->post_status],
-                    'order_date'           => $the_order->order_date,
+                    'order_status'         => $statuses['wc-' . dokan_get_prop( $the_order, 'status' )],
+                    'order_date'           => dokan_get_date_created( $the_order ),
                     'customer_name'        => $customer_name,
                     'customer_email'       => $customer_email,
                     'customer_phone'       => $customer_phone,
@@ -172,18 +172,18 @@ class Dokan_Template_Orders {
             header( "Content-Disposition: attachment; filename=$filename.csv" );
 
             $headers = array(
-                'order_id'             => __( 'Order No', 'dokan' ),
-                'order_items'          => __( 'Order Items', 'dokan' ),
-                'order_shipping'       => __( 'Shipping method', 'dokan' ),
-                'order_shipping_cost'  => __( 'Shipping Cost', 'dokan' ),
-                'order_payment_method' => __( 'Payment method', 'dokan' ),
-                'order_total'          => __( 'Order Total', 'dokan' ),
-                'order_status'         => __( 'Order Status', 'dokan' ),
-                'order_date'           => __( 'Order Date', 'dokan' ),
-                'customer_name'        => __( 'Customer Name', 'dokan' ),
-                'customer_email'       => __( 'Customer Email', 'dokan' ),
-                'customer_phone'       => __( 'Customer Phone', 'dokan' ),
-                'customer_ip'          => __( 'Customer IP', 'dokan' ),
+                'order_id'             => __( 'Order No', 'dokan-lite' ),
+                'order_items'          => __( 'Order Items', 'dokan-lite' ),
+                'order_shipping'       => __( 'Shipping method', 'dokan-lite' ),
+                'order_shipping_cost'  => __( 'Shipping Cost', 'dokan-lite' ),
+                'order_payment_method' => __( 'Payment method', 'dokan-lite' ),
+                'order_total'          => __( 'Order Total', 'dokan-lite' ),
+                'order_status'         => __( 'Order Status', 'dokan-lite' ),
+                'order_date'           => __( 'Order Date', 'dokan-lite' ),
+                'customer_name'        => __( 'Customer Name', 'dokan-lite' ),
+                'customer_email'       => __( 'Customer Email', 'dokan-lite' ),
+                'customer_phone'       => __( 'Customer Phone', 'dokan-lite' ),
+                'customer_ip'          => __( 'Customer IP', 'dokan-lite' ),
             );
 
             foreach ( (array)$headers as $label ) {
@@ -208,7 +208,7 @@ class Dokan_Template_Orders {
                     $customer_phone   = esc_html( get_post_meta( $order->order_id, '_billing_phone', true ) );
                     $customer_ip      = esc_html( get_post_meta( $order->order_id, '_customer_ip_address', true ) );
                 } else {
-                    $customer_name  = get_post_meta( $order->id, '_billing_first_name', true ). ' '. get_post_meta( $order->id, '_billing_last_name', true ).'(Guest)';
+                    $customer_name  = get_post_meta( dokan_get_prop( $order, 'id' ), '_billing_first_name', true ). ' '. get_post_meta( dokan_get_prop( $order, 'id' ), '_billing_last_name', true ).'(Guest)';
                     $customer_email = esc_html( get_post_meta( $order->order_id, '_billing_email', true ) );
                     $customer_phone = esc_html( get_post_meta( $order->order_id, '_billing_phone', true ) );
                     $customer_ip    = esc_html( get_post_meta( $order->order_id, '_customer_ip_address', true ) );
@@ -221,8 +221,8 @@ class Dokan_Template_Orders {
                     'order_shipping_cost'  => $the_order->get_total_shipping(),
                     'order_payment_method' => get_post_meta( $order->order_id, '_payment_method_title', true ),
                     'order_total'          => $the_order->get_total(),
-                    'order_status'         => $statuses[$the_order->post_status],
-                    'order_date'           => $the_order->order_date,
+                    'order_status'         => $statuses[dokan_get_prop( $the_order, 'status' )],
+                    'order_date'           => dokan_get_date_created( $the_order ),
                     'customer_name'        => $customer_name,
                     'customer_email'       => $customer_email,
                     'customer_phone'       => $customer_phone,

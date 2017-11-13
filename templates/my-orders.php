@@ -18,17 +18,17 @@
 
     if ( $customer_orders ) : ?>
 
-        <h2><?php echo apply_filters( 'woocommerce_my_account_my_orders_title', __( 'Recent Orders', 'dokan' ) ); ?></h2>
+        <h2><?php echo apply_filters( 'woocommerce_my_account_my_orders_title', __( 'Recent Orders', 'dokan-lite' ) ); ?></h2>
 
         <table class="shop_table my_account_orders table table-striped">
 
             <thead>
                 <tr>
-                    <th class="order-number"><span class="nobr"><?php _e( 'Order', 'dokan' ); ?></span></th>
-                    <th class="order-date"><span class="nobr"><?php _e( 'Date', 'dokan' ); ?></span></th>
-                    <th class="order-status"><span class="nobr"><?php _e( 'Status', 'dokan' ); ?></span></th>
-                    <th class="order-total"><span class="nobr"><?php _e( 'Total', 'dokan' ); ?></span></th>
-                    <th class="order-total"><span class="nobr"><?php _e( 'Seller', 'dokan' ); ?></span></th>
+                    <th class="order-number"><span class="nobr"><?php _e( 'Order', 'dokan-lite' ); ?></span></th>
+                    <th class="order-date"><span class="nobr"><?php _e( 'Date', 'dokan-lite' ); ?></span></th>
+                    <th class="order-status"><span class="nobr"><?php _e( 'Status', 'dokan-lite' ); ?></span></th>
+                    <th class="order-total"><span class="nobr"><?php _e( 'Total', 'dokan-lite' ); ?></span></th>
+                    <th class="order-total"><span class="nobr"><?php _e( 'Vendor', 'dokan-lite' ); ?></span></th>
                     <th class="order-actions">&nbsp;</th>
                 </tr>
             </thead>
@@ -46,23 +46,23 @@
                             </a>
                         </td>
                         <td class="order-date">
-                            <time datetime="<?php echo date('Y-m-d', strtotime( $order->order_date ) ); ?>" title="<?php echo esc_attr( strtotime( $order->order_date ) ); ?>"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $order->order_date ) ); ?></time>
+                            <time datetime="<?php echo date('Y-m-d', strtotime( dokan_get_date_created( $order ) ) ); ?>" title="<?php echo esc_attr( strtotime( dokan_get_date_created( $order ) ) ); ?>"><?php echo date_i18n( get_option( 'date_format' ), strtotime( dokan_get_date_created( $order ) ) ); ?></time>
                         </td>
                         <td class="order-status" style="text-align:left; white-space:nowrap;">
-                            <?php echo isset( $statuses[$order->post_status] ) ? $statuses[$order->post_status] : $order->post_status; ?>
+                            <?php echo isset( $statuses[dokan_get_prop( $order, 'status' )] ) ? $statuses[dokan_get_prop( $order, 'status' )] : dokan_get_prop( $order, 'status' ); ?>
                         </td>
                         <td class="order-total">
-                            <?php echo sprintf( _n( '%s for %s item', '%s for %s items', $item_count, 'dokan' ), $order->get_formatted_order_total(), $item_count ); ?>
+                            <?php echo sprintf( _n( '%s for %s item', '%s for %s items', $item_count, 'dokan-lite' ), $order->get_formatted_order_total(), $item_count ); ?>
                         </td>
                         
                         <td class="order-total">
                             <?php
-                                $seller_id = dokan_get_seller_id_by_order( $order->id );
-                                if ( $seller_id && $seller_id != 0 ) {
+                                $seller_id = dokan_get_seller_id_by_order( dokan_get_prop( $order, 'id' ) );
+                                if ( !is_array( $seller_id ) && $seller_id != 0 ) {
                                     $sellershop = dokan_get_store_info( $seller_id );
                                     echo '<a href="'. dokan_get_store_url( $seller_id ) .'">'. $sellershop['store_name'] .'</a>';
                                 } else {
-                                    _e( 'Multiple Seller', 'dokan' );
+                                    _e( 'Multiple Vendor', 'dokan-lite' );
                                 }
                             ?>
                         </td>
@@ -71,21 +71,21 @@
                             <?php
                                 $actions = array();
 
-                                if ( in_array( $order->status, apply_filters( 'woocommerce_valid_order_statuses_for_payment', array( 'pending', 'failed' ), $order ) ) )
+                                if ( in_array( dokan_get_prop( $order, 'status' ), apply_filters( 'woocommerce_valid_order_statuses_for_payment', array( 'pending', 'failed' ), $order ) ) )
                                     $actions['pay'] = array(
                                         'url'  => $order->get_checkout_payment_url(),
-                                        'name' => __( 'Pay', 'dokan' )
+                                        'name' => __( 'Pay', 'dokan-lite' )
                                     );
 
-                                if ( in_array( $order->status, apply_filters( 'woocommerce_valid_order_statuses_for_cancel', array( 'pending', 'failed' ), $order ) ) )
+                                if ( in_array( dokan_get_prop( $order, 'status' ), apply_filters( 'woocommerce_valid_order_statuses_for_cancel', array( 'pending', 'failed' ), $order ) ) )
                                     $actions['cancel'] = array(
                                         'url'  => $order->get_cancel_order_url( get_permalink( wc_get_page_id( 'myaccount' ) ) ),
-                                        'name' => __( 'Cancel', 'dokan' )
+                                        'name' => __( 'Cancel', 'dokan-lite' )
                                     );
 
                                 $actions['view'] = array(
                                     'url'  => $order->get_view_order_url(),
-                                    'name' => __( 'View', 'dokan' )
+                                    'name' => __( 'View', 'dokan-lite' )
                                 );
 
                                 $actions = apply_filters( 'woocommerce_my_account_my_orders_actions', $actions, $order );
@@ -103,7 +103,7 @@
 
     <?php else: ?>
 
-        <p class="dokan-info"><?php _e( 'No orders found!', 'dokan' ); ?></p>
+        <p class="dokan-info"><?php _e( 'No orders found!', 'dokan-lite' ); ?></p>
 
     <?php endif; ?>
 

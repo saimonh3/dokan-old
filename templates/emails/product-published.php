@@ -1,10 +1,28 @@
-Hello %seller_name%,
+<?php
+/**
+ * Product published Email.
+ *
+ * An email sent to the vendor when a new Product is published from pending.
+ *
+ * @class       Dokan_Email_Product_Published
+ * @version     2.6.8
+ * 
+ */
 
-Your product "%title%" has been approved by one of our admin, congrats!
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
-View product: %product_link%
-Update: %product_edit_link%
+do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
+<p>
+    <?php _e( 'Hello '.$data['seller-name'], 'dokan-lite' ); ?>
+<p/>
+<p>
+    <?php echo sprintf( __( 'Your product : <a href="%s">%s</a> is approved by the admin, congrats!', 'dokan-lite' ), $data['product_url'], $data['product-title'] ); ?>
+</p>
+<p>
+    <?php echo sprintf( __( 'To Edit product click : <a href="%s">here</a>', 'dokan-lite' ), $data['product_edit_link'] ); ?>
+</p>
+<?php
 
----
-Sent from %site_name%
-%site_url%
+do_action( 'woocommerce_email_footer', $email );

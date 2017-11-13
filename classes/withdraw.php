@@ -50,6 +50,9 @@ class Dokan_Withdraw {
             SET status = %d WHERE user_id=%d AND id = %d",
             $status, $user_id, $row_id
         ) );
+       
+        $cache_key     = 'dokan_seller_balance_' . $user_id;
+        wp_cache_delete( $cache_key );
     }
 
     /**
@@ -208,7 +211,7 @@ class Dokan_Withdraw {
      * @return integer
      */
     function get_withdraw_limit() {
-        return (int) dokan_get_option( 'withdraw_limit', 'dokan_withdraw', '50' );
+        return (int) dokan_get_option( 'withdraw_limit', 'dokan_withdraw', 0 );
     }
 
     /**
@@ -232,11 +235,11 @@ class Dokan_Withdraw {
     function request_status( $status ) {
         switch ( $status ) {
             case 0:
-                return '<span class="label label-danger">' . __( 'Pending Reivew', 'dokan' ) . '</span>';
+                return '<span class="label label-danger">' . __( 'Pending Reivew', 'dokan-lite' ) . '</span>';
                 break;
 
             case 1:
-                return '<span class="label label-warning">' . __( 'Accepted', 'dokan' ) . '</span>';
+                return '<span class="label label-warning">' . __( 'Accepted', 'dokan-lite' ) . '</span>';
                 break;
         }
     }

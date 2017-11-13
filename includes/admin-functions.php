@@ -39,18 +39,18 @@ function dokan_admin_shop_order_edit_columns( $existing_columns ) {
     $columns = array();
 
     $columns['cb']               = '<input type="checkbox" />';
-    $columns['order_status']     = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', 'dokan' ) . '">' . esc_attr__( 'Status', 'dokan' ) . '</span>';
-    $columns['order_title']      = __( 'Order', 'dokan' );
-    $columns['order_items']      = __( 'Purchased', 'dokan' );
-    $columns['shipping_address'] = __( 'Ship to', 'dokan' );
+    $columns['order_status']     = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', 'dokan-lite' ) . '">' . esc_attr__( 'Status', 'dokan-lite' ) . '</span>';
+    $columns['order_title']      = __( 'Order', 'dokan-lite' );
+    $columns['order_items']      = __( 'Purchased', 'dokan-lite' );
+    $columns['shipping_address'] = __( 'Ship to', 'dokan-lite' );
 
-    $columns['customer_message'] = '<span class="notes_head tips" data-tip="' . esc_attr__( 'Customer Message', 'dokan' ) . '">' . esc_attr__( 'Customer Message', 'dokan' ) . '</span>';
-    $columns['order_notes']      = '<span class="order-notes_head tips" data-tip="' . esc_attr__( 'Order Notes', 'dokan' ) . '">' . esc_attr__( 'Order Notes', 'dokan' ) . '</span>';
-    $columns['order_date']       = __( 'Date', 'dokan' );
-    $columns['order_total']      = __( 'Total', 'dokan' );
-    $columns['order_actions']    = __( 'Actions', 'dokan' );
-    $columns['seller']        = __( 'Seller', 'dokan' );
-    $columns['suborder']        = __( 'Sub Order', 'dokan' );
+    $columns['customer_message'] = '<span class="notes_head tips" data-tip="' . esc_attr__( 'Customer Message', 'dokan-lite' ) . '">' . esc_attr__( 'Customer Message', 'dokan-lite' ) . '</span>';
+    $columns['order_notes']      = '<span class="order-notes_head tips" data-tip="' . esc_attr__( 'Order Notes', 'dokan-lite' ) . '">' . esc_attr__( 'Order Notes', 'dokan-lite' ) . '</span>';
+    $columns['order_date']       = __( 'Date', 'dokan-lite' );
+    $columns['order_total']      = __( 'Total', 'dokan-lite' );
+    $columns['order_actions']    = __( 'Actions', 'dokan-lite' );
+    $columns['seller']        = __( 'Vendor', 'dokan-lite' );
+    $columns['suborder']        = __( 'Sub Order', 'dokan-lite' );
 
     return $columns;
 }
@@ -66,9 +66,9 @@ add_filter( 'manage_edit-shop_order_columns', 'dokan_admin_shop_order_edit_colum
  * @param type $col
  */
 function dokan_shop_order_custom_columns( $col ) {
-    global $post, $woocommerce, $the_order;
+    global $post, $the_order;
 
-    if ( empty( $the_order ) || $the_order->id != $post->ID ) {
+    if ( empty( $the_order ) || dokan_get_prop( $the_order, 'id') != $post->ID ) {
         $the_order = new WC_Order( $post->ID );
     }
 
@@ -76,7 +76,7 @@ function dokan_shop_order_custom_columns( $col ) {
         case 'order_title':
             if ($post->post_parent !== 0) {
                 echo '<strong>';
-                echo __( 'Sub Order of', 'dokan' );
+                echo __( 'Sub Order of', 'dokan-lite' );
                 printf( ' <a href="%s">#%s</a>', admin_url( 'post.php?action=edit&post=' . $post->post_parent ), $post->post_parent );
                 echo '</strong>';
             }
@@ -86,7 +86,7 @@ function dokan_shop_order_custom_columns( $col ) {
             $has_sub = get_post_meta( $post->ID, 'has_sub_order', true );
 
             if ( $has_sub == '1' ) {
-                printf( '<a href="#" class="show-sub-orders" data-class="parent-%1$d" data-show="%2$s" data-hide="%3$s">%2$s</a>', $post->ID, __( 'Show Sub-Orders', 'dokan' ), __( 'Hide Sub-Orders', 'dokan' ));
+                printf( '<a href="#" class="show-sub-orders" data-class="parent-%1$d" data-show="%2$s" data-hide="%3$s">%2$s</a>', $post->ID, __( 'Show Sub-Orders', 'dokan-lite' ), __( 'Hide Sub-Orders', 'dokan-lite' ));
             }
             break;
 
@@ -243,7 +243,7 @@ function dokan_admin_shop_order_toggle_sub_orders() {
     global $wp_query;
 
     if ( isset( $wp_query->query['post_type'] ) && $wp_query->query['post_type'] == 'shop_order' ) {
-        echo '<button class="toggle-sub-orders button">' . __( 'Toggle Sub-orders', 'dokan' ) . '</button>';
+        echo '<button class="toggle-sub-orders button">' . __( 'Toggle Sub-orders', 'dokan-lite' ) . '</button>';
     }
 }
 
@@ -289,7 +289,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
     if ( ! $start_date ) {
         $start_date = date( 'Y-m-d', strtotime( date( 'Ym', current_time( 'timestamp' ) ) . '01' ) );
 
-        if ( $group_by == 'month' ) {
+        if ( $group_by == 'year' ) {
             $start_date = $year . '-01-01';
         }
     }
@@ -297,7 +297,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
     if ( ! $end_date ) {
         $end_date = date( 'Y-m-d', current_time( 'timestamp' ) );
 
-        if ( $group_by == 'month' && ( $year < $current_year ) ) {
+        if ( $group_by == 'year' && ( $year < $current_year ) ) {
             $end_date = $year . '-12-31';
         }
     }
@@ -314,6 +314,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
         $barwidth             = 60 * 60 * 24 * 1000;
     } else {
         $group_by_query = 'YEAR(p.post_date), MONTH(p.post_date)';
+        $date_where           = " AND DATE(p.post_date) >= '$start_date' AND DATE(p.post_date) <= '$end_date'";
         $chart_interval = 0;
         $min_date             = $start_date_to_time;
         while ( ( $min_date   = strtotime( "+1 MONTH", $min_date ) ) <= $end_date_to_time ) {
@@ -365,150 +366,159 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
     <script type="text/javascript">
         jQuery(function($) {
 
-            var order_data = jQuery.parseJSON( '<?php echo $chart_data; ?>' );
-            var series = [
-                {
-                    label: "<?php echo esc_js( __( 'Total Sales', 'dokan' ) ) ?>",
-                    data: order_data.order_amounts,
-                    shadowSize: 0,
-                    hoverable: true,
-                    points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
-                    lines: { show: true, lineWidth: 4, fill: false },
-                    shadowSize: 0,
-                    prepend_tooltip: "<?php echo __('Total: ', 'dokan') . get_woocommerce_currency_symbol(); ?>"
-                },
-                {
-                    label: "<?php echo esc_js( __( 'Number of orders', 'dokan' ) ) ?>",
-                    data: order_data.order_counts,
-                    shadowSize: 0,
-                    hoverable: true,
-                    points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
-                    lines: { show: true, lineWidth: 4, fill: false },
-                    shadowSize: 0,
-                    append_tooltip: " <?php echo __( 'sales', 'dokan' ); ?>"
-                },
-                {
-                    label: "<?php echo esc_js( __( 'Commision', 'dokan' ) ) ?>",
-                    data: order_data.order_commision,
-                    shadowSize: 0,
-                    hoverable: true,
-                    points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
-                    lines: { show: true, lineWidth: 4, fill: false },
-                    shadowSize: 0,
-                    prepend_tooltip: "<?php echo __('Commision: ', 'dokan') . get_woocommerce_currency_symbol(); ?>"
-                },
-            ];
+            $(document).ready( function() {
 
-            var main_chart = jQuery.plot(
-                jQuery('.chart-placeholder.main'),
-                series,
-                {
-                    legend: {
-                        show: true,
-                        position: 'nw'
-                    },
-                    series: {
-                        lines: { show: true, lineWidth: 4, fill: false },
-                        points: { show: true }
-                    },
-                    grid: {
-                        borderColor: '#eee',
-                        color: '#aaa',
-                        backgroundColor: '#fff',
-                        borderWidth: 1,
+                var order_data = jQuery.parseJSON( '<?php echo $chart_data; ?>' );
+                var isRtl = '<?php echo is_rtl() ? "1" : "0"; ?>';
+                var series = [
+                    {
+                        label: "<?php echo esc_js( __( 'Total Sales', 'dokan-lite' ) ) ?>",
+                        data: order_data.order_amounts,
+                        shadowSize: 0,
                         hoverable: true,
-                        show: true,
-                        aboveData: false,
+                        points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
+                        lines: { show: true, lineWidth: 4, fill: false },
+                        shadowSize: 0,
+                        prepend_tooltip: "<?php echo __('Total: ', 'dokan-lite') . get_woocommerce_currency_symbol(); ?>"
                     },
-                    xaxis: {
-                        color: '#aaa',
-                        position: "bottom",
-                        tickColor: 'transparent',
-                        mode: "time",
-                        timeformat: "<?php if ( $group_by == 'day' ) echo '%d %b'; else echo '%b'; ?>",
-                        monthNames: <?php echo json_encode( array_values( $wp_locale->month_abbrev ) ) ?>,
-                        tickLength: 1,
-                        minTickSize: [1, "<?php echo $group_by; ?>"],
-                        font: {
-                            color: "#aaa"
-                        }
+                    {
+                        label: "<?php echo esc_js( __( 'Number of orders', 'dokan-lite' ) ) ?>",
+                        data: order_data.order_counts,
+                        shadowSize: 0,
+                        hoverable: true,
+                        points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
+                        lines: { show: true, lineWidth: 4, fill: false },
+                        shadowSize: 0,
+                        append_tooltip: " <?php echo __( 'sales', 'dokan-lite' ); ?>"
                     },
-                    yaxes: [
-                        {
-                            min: 0,
-                            minTickSize: 1,
-                            tickDecimals: 0,
-                            color: '#d4d9dc',
-                            font: { color: "#aaa" }
+                    {
+                        label: "<?php echo esc_js( __( 'Commision', 'dokan-lite' ) ) ?>",
+                        data: order_data.order_commision,
+                        shadowSize: 0,
+                        hoverable: true,
+                        points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
+                        lines: { show: true, lineWidth: 4, fill: false },
+                        shadowSize: 0,
+                        prepend_tooltip: "<?php echo __('Commision: ', 'dokan-lite') . get_woocommerce_currency_symbol(); ?>"
+                    },
+                ];
+
+                var main_chart = jQuery.plot(
+                    jQuery('.chart-placeholder.main'),
+                    series,
+                    {
+                        legend: {
+                            show: true,
+                            position: 'nw'
                         },
-                        {
-                            position: "right",
-                            min: 0,
-                            tickDecimals: 2,
-                            alignTicksWithAxis: 1,
-                            color: 'transparent',
-                            font: { color: "#aaa" }
-                        }
-                    ],
-                    colors: ["<?php echo $chart_colours['order_counts']; ?>", "<?php echo $chart_colours['order_amounts']; ?>", "<?php echo $chart_colours['order_commision']; ?>"]
+                        series: {
+                            lines: { show: true, lineWidth: 4, fill: false },
+                            points: { show: true }
+                        },
+                        grid: {
+                            borderColor: '#eee',
+                            color: '#aaa',
+                            backgroundColor: '#fff',
+                            borderWidth: 1,
+                            hoverable: true,
+                            show: true,
+                            aboveData: false,
+                        },
+                        xaxis: {
+                            color: '#aaa',
+                            position: "bottom",
+                            tickColor: 'transparent',
+                            mode: "time",
+                            timeformat: "<?php if ( $group_by == 'day' ) echo '%d %b'; else echo '%b'; ?>",
+                            monthNames: <?php echo json_encode( array_values( $wp_locale->month_abbrev ) ) ?>,
+                            tickLength: 1,
+                            minTickSize: [1, "<?php echo ( $group_by == 'year' ) ? 'month' : $group_by; ?>"],
+                            font: {
+                                color: "#aaa"
+                            },
+                            transform: function (v) { return ( isRtl == '1' ) ? -v : v; },
+                            inverseTransform: function (v) { return ( isRtl == '1' ) ? -v : v; }
+                        },
+                        yaxes: [
+                            {
+                                position: ( isRtl == '1' ) ? "right" : "left",
+                                min: 0,
+                                minTickSize: 1,
+                                tickDecimals: 0,
+                                color: '#d4d9dc',
+                                font: { color: "#aaa" }
+                            },
+                            {
+                                position: ( isRtl == '1' ) ? "right" : "left",
+                                min: 0,
+                                tickDecimals: 2,
+                                alignTicksWithAxis: 1,
+                                color: 'transparent',
+                                font: { color: "#aaa" }
+                            }
+                        ],
+                        colors: ["<?php echo $chart_colours['order_counts']; ?>", "<?php echo $chart_colours['order_amounts']; ?>", "<?php echo $chart_colours['order_commision']; ?>"]
+                    }
+                );
+
+                jQuery('.chart-placeholder').resize();
+
+
+                function showTooltip(x, y, contents) {
+                    jQuery('<div class="chart-tooltip">' + contents + '</div>').css({
+                        top: y - 16,
+                        left: x + 20
+                    }).appendTo("body").fadeIn(200);
                 }
-            );
 
-            jQuery('.chart-placeholder').resize();
+                var prev_data_index = null;
+                var prev_series_index = null;
 
+                jQuery(".chart-placeholder").bind("plothover", function(event, pos, item) {
+                    if (item) {
+                        if (prev_data_index != item.dataIndex || prev_series_index != item.seriesIndex) {
+                            prev_data_index = item.dataIndex;
+                            prev_series_index = item.seriesIndex;
 
-            function showTooltip(x, y, contents) {
-                jQuery('<div class="chart-tooltip">' + contents + '</div>').css({
-                    top: y - 16,
-                    left: x + 20
-                }).appendTo("body").fadeIn(200);
-            }
+                            jQuery(".chart-tooltip").remove();
 
-            var prev_data_index = null;
-            var prev_series_index = null;
+                            if (item.series.points.show || item.series.enable_tooltip) {
 
-            jQuery(".chart-placeholder").bind("plothover", function(event, pos, item) {
-                if (item) {
-                    if (prev_data_index != item.dataIndex || prev_series_index != item.seriesIndex) {
-                        prev_data_index = item.dataIndex;
-                        prev_series_index = item.seriesIndex;
+                                var y = item.series.data[item.dataIndex][1];
 
-                        jQuery(".chart-tooltip").remove();
+                                tooltip_content = '';
 
-                        if (item.series.points.show || item.series.enable_tooltip) {
+                                if (item.series.prepend_label)
+                                    tooltip_content = tooltip_content + item.series.label + ": ";
 
-                            var y = item.series.data[item.dataIndex][1];
+                                if (item.series.prepend_tooltip)
+                                    tooltip_content = tooltip_content + item.series.prepend_tooltip;
 
-                            tooltip_content = '';
+                                tooltip_content = tooltip_content + y;
 
-                            if (item.series.prepend_label)
-                                tooltip_content = tooltip_content + item.series.label + ": ";
+                                if (item.series.append_tooltip)
+                                    tooltip_content = tooltip_content + item.series.append_tooltip;
 
-                            if (item.series.prepend_tooltip)
-                                tooltip_content = tooltip_content + item.series.prepend_tooltip;
+                                if (item.series.pie.show) {
 
-                            tooltip_content = tooltip_content + y;
+                                    showTooltip(pos.pageX, pos.pageY, tooltip_content);
 
-                            if (item.series.append_tooltip)
-                                tooltip_content = tooltip_content + item.series.append_tooltip;
+                                } else {
 
-                            if (item.series.pie.show) {
+                                    showTooltip(item.pageX, item.pageY, tooltip_content);
 
-                                showTooltip(pos.pageX, pos.pageY, tooltip_content);
-
-                            } else {
-
-                                showTooltip(item.pageX, item.pageY, tooltip_content);
+                                }
 
                             }
-
                         }
+                    } else {
+                        jQuery(".chart-tooltip").remove();
+                        prev_data_index = null;
                     }
-                } else {
-                    jQuery(".chart-tooltip").remove();
-                    prev_data_index = null;
-                }
+                });
+
             });
+
         });
 
     </script>
@@ -527,9 +537,10 @@ function dokan_send_notification_on_product_publish( $post ) {
     if ( $post->post_type != 'product' ) {
         return;
     }
-
+    
     $seller = get_user_by( 'id', $post->post_author );
-    Dokan_Email::init()->product_published( $post, $seller );
+    
+    do_action( 'dokan_pending_product_published_notification', $post, $seller );
 }
 
 add_action( 'pending_to_publish', 'dokan_send_notification_on_product_publish' );
@@ -539,7 +550,7 @@ add_action( 'pending_to_publish', 'dokan_send_notification_on_product_publish' )
 /**
  * Display form field with list of authors.
  *
- * @since 2.6.0
+ * @since 2.5.3
  *
  * @param object $post
  */
@@ -550,8 +561,8 @@ function dokan_seller_meta_box( $post ) {
     $user_query = new WP_User_Query( array( 'role' => 'seller' ) );
     $sellers    = $user_query->get_results();
     ?>
-    <label class="screen-reader-text" for="post_author_override"><?php _e('Seller'); ?></label>
-    <select name="post_author_override" id="post_author_override" class="">
+    <label class="screen-reader-text" for="dokan_product_author_override"><?php _e( 'Vendor', 'dokan-lite' ); ?></label>
+    <select name="dokan_product_author_override" id="dokan_product_author_override" class="">
         <?php if ( ! $sellers ): ?>
             <option value="<?php echo $admin_user->ID ?>"><?php echo $admin_user->display_name; ?></option>
         <?php else: ?>
@@ -564,12 +575,59 @@ function dokan_seller_meta_box( $post ) {
      <?php
 }
 
+/**
+ * Remove default author metabox and added
+ * new one for dokan seller
+ *
+ * @since  1.0.0
+ *
+ * @return void
+ */
 function dokan_add_seller_meta_box(){
     remove_meta_box( 'authordiv', 'product', 'core' );
-    add_meta_box('sellerdiv', __('Seller'), 'dokan_seller_meta_box', 'product', 'normal', 'core');
+    add_meta_box('sellerdiv', __('Vendor', 'dokan-lite' ), 'dokan_seller_meta_box', 'product', 'normal', 'core');
 }
 
 add_action( 'add_meta_boxes', 'dokan_add_seller_meta_box' );
+
+/**
+* Override product vendor ID from admin panel
+*
+* @since 2.6.2
+*
+* @return void
+**/
+function dokan_override_product_author_by_admin( $product_id, $post ) {
+    $product = wc_get_product( $product_id );
+    $seller_id = !empty( $_POST['dokan_product_author_override'] ) ? $_POST['dokan_product_author_override'] : '-1';
+
+    if ( $seller_id < 0 ) {
+        return;
+    }
+
+    dokan_override_product_author( $product, $seller_id );
+}
+
+add_action( 'woocommerce_process_product_meta', 'dokan_override_product_author_by_admin', 12, 2 );
+
+/**
+ * Dokan override author ID from admin
+ *
+ * @since  2.6.2
+ *
+ * @param  object $product
+ * @param  integer $seller_id
+ *
+ * @return void
+ */
+function dokan_override_product_author( $product, $seller_id ){
+    wp_update_post( array(
+        'ID'          => $product->get_id(),
+        'post_author' => $seller_id
+    ) );
+
+    do_action( 'dokan_after_override_product_author', $product, $seller_id );
+}
 
 /**
  * Generate Earning report By seller in admin area
@@ -677,34 +735,34 @@ function dokan_admin_report_by_seller( $chosen_seller_id) {
             var order_data = jQuery.parseJSON( '<?php echo $chart_data; ?>' );
             var series = [
                 {
-                    label: "<?php echo esc_js( __( 'Total Sales', 'dokan' ) ) ?>",
+                    label: "<?php echo esc_js( __( 'Total Sales', 'dokan-lite' ) ) ?>",
                     data: order_data.order_amounts,
                     shadowSize: 0,
                     hoverable: true,
                     points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
                     lines: { show: true, lineWidth: 4, fill: false },
                     shadowSize: 0,
-                    prepend_tooltip: "<?php echo __('Total: ', 'dokan') . get_woocommerce_currency_symbol(); ?>"
+                    prepend_tooltip: "<?php echo __('Total: ', 'dokan-lite') . get_woocommerce_currency_symbol(); ?>"
                 },
                 {
-                    label: "<?php echo esc_js( __( 'Number of orders', 'dokan' ) ) ?>",
+                    label: "<?php echo esc_js( __( 'Number of orders', 'dokan-lite' ) ) ?>",
                     data: order_data.order_counts,
                     shadowSize: 0,
                     hoverable: true,
                     points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
                     lines: { show: true, lineWidth: 4, fill: false },
                     shadowSize: 0,
-                    append_tooltip: " <?php echo __( 'sales', 'dokan' ); ?>"
+                    append_tooltip: " <?php echo __( 'sales', 'dokan-lite' ); ?>"
                 },
                 {
-                    label: "<?php echo esc_js( __( 'Commision', 'dokan' ) ) ?>",
+                    label: "<?php echo esc_js( __( 'Commision', 'dokan-lite' ) ) ?>",
                     data: order_data.order_commision,
                     shadowSize: 0,
                     hoverable: true,
                     points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
                     lines: { show: true, lineWidth: 4, fill: false },
                     shadowSize: 0,
-                    prepend_tooltip: "<?php echo __('Commision: ', 'dokan') . get_woocommerce_currency_symbol(); ?>"
+                    prepend_tooltip: "<?php echo __('Commision: ', 'dokan-lite') . get_woocommerce_currency_symbol(); ?>"
                 },
             ];
 

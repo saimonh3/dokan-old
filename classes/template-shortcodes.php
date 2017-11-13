@@ -17,7 +17,7 @@ class Dokan_Template_Shortcodes {
         add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
         add_shortcode( 'dokan-top-rated-product', array( $this, 'top_rated_product_shortcode' ) );
-        add_shortcode( 'dokan-my-orders', array( $this, 'my_orders_page' ) );        
+        add_shortcode( 'dokan-my-orders', array( $this, 'my_orders_page' ) );
     }
 
     /**
@@ -47,44 +47,47 @@ class Dokan_Template_Shortcodes {
         global $wp;
 
         if ( ! function_exists( 'WC' ) ) {
-            return sprintf( __( 'Please install <a href="%s"><strong>WooCommerce</strong></a> plugin first', 'dokan' ), 'http://wordpress.org/plugins/woocommerce/' );
+            return sprintf( __( 'Please install <a href="%s"><strong>WooCommerce</strong></a> plugin first', 'dokan-lite' ), 'http://wordpress.org/plugins/woocommerce/' );
         }
+
+        ob_start();
 
         if ( isset( $wp->query_vars['products'] ) ) {
             dokan_get_template_part( 'products/products' );
-            return;
+            return ob_get_clean();
         }
 
         if ( isset( $wp->query_vars['new-product'] ) ) {
             do_action( 'dokan_render_new_product_template', $wp->query_vars );
-            return;
+            return ob_get_clean();
         }
 
         if ( isset( $wp->query_vars['orders'] ) ) {
             dokan_get_template_part( 'orders/orders' );
-            return;
+            return ob_get_clean();
         }
 
         if ( isset( $wp->query_vars['withdraw'] ) ) {
             dokan_get_template_part( 'withdraw/withdraw' );
-            return;
+            return ob_get_clean();
         }
 
         if ( isset( $wp->query_vars['settings'] ) ) {
             dokan_get_template_part('settings/store');
-            return;
+            return ob_get_clean();
         }
 
         if ( isset( $wp->query_vars['page'] ) ) {
             dokan_get_template_part( 'dashboard/dashboard' );
-            return;
+            return ob_get_clean();
         }
         if ( isset( $wp->query_vars['edit-account'] ) ) {
             dokan_get_template_part( 'dashboard/edit-account' );
-            return;
+            return ob_get_clean();
         }
 
         do_action( 'dokan_load_custom_template', $wp->query_vars );
+
     }
 
     /**
@@ -102,15 +105,16 @@ class Dokan_Template_Shortcodes {
         *
         * @param array
         */
-        $per_page = shortcode_atts( apply_filters( 'dokan_best_selling_product_per_page', array(
-            'no_of_product' => 8
-        ), $atts ) );
+        $atts_val = shortcode_atts( apply_filters( 'dokan_best_selling_product_per_page', array(
+            'no_of_product' => 8,
+            'seller_id' => '',
+        ), $atts ), $atts );
 
         ob_start();
         ?>
         <ul>
             <?php
-            $best_selling_query = dokan_get_best_selling_products();
+            $best_selling_query = dokan_get_best_selling_products( $atts_val['no_of_product'], $atts_val['seller_id'] );
             ?>
             <?php while ( $best_selling_query->have_posts() ) : $best_selling_query->the_post(); ?>
 

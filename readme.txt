@@ -1,9 +1,12 @@
-=== Dokan Multivendor (Lite) ===
-Contributors: tareq1988, wedevs
+=== Dokan Multivendor Marketplace ===
+Contributors: tareq1988, wedevs, rafsuntaskin, sabbir1991, nazmulhassann20, roshni07
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.4.2
+Tested up to: 4.8.1
+WC requires at least: 2.6
+WC tested up to: 3.1.2
+Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,83 +15,111 @@ The pioneer multi-vendor plugin for WordPress. Start your own marketplace in min
 
 == Description ==
 
-> #### This is a **Lite** version of the **Dokan** plugin.
-> Get the [**Pro Version**](https://wedevs.com/products/plugins/dokan/?utm_source=wporg&utm_medium=cta&utm_campaign=dokan-lite) which includes bunch of features that were removed from this version.
+= Dokan Multivendor Marketplace Plugin For WordPress =
 
-A multi-vendor plugin leveraging the power of WooCommerce.
+Dokan is the best front end multi vendor marketplace on WordPress, powered by WooCommerce. Build your own Amazon, Shopify, eBay, Magento like marketplace in just 30 minutes. Dokan is the fastest way to start ecommerce and earn through commissions with products ranging from digital, physical to variable.
 
+**The best Frontend user interface**
+
+We love the philosophy of a complete frontend experience. So, vendors have their personalised dashboard on the store frontend where they can find all what they need. Backend access is restricted to the admin only. This sets Dokan apart on a higher ground. All of our add-ons are frontend compatible. Dokan(Pro) comes with a free responsive ecommerce theme that has widgets specially made for Dokan.
+
+**It’s fast and easy to use**
+
+Your business operations with Dokan is smooth and fast. Everything will work as you expected because we have designed the experience following the best intuitive practices from popular ecommerce activators like WooCommerce, Bigcommerce etc.
+
+**Reliable yet a growing platform**
+
+We regularly keep our version updated for flawless operation and integration with dependable  services. We just not only keep things compatible, we have a style of adding the most trendy new features to Dokan with every update.
+
+**A really scalable market**
+
+You can have unlimited vendors and vendors can create unlimited products. Currently 5 product types are supported eg. physical product, downloadable product, variable product, bookable products through the [Dokan WC Bookings](https://wedevs.com/products/plugins/dokan/woocommerce-booking-integration/) add on and auction products through the [Dokan Simple Auction](https://wedevs.com/products/plugins/dokan/dokan-simple-auctions/) add on.
+
+**Earn in many ways**
+
+Profit doesn’t only rely on sales. Multiple ways allow earning through vendor commissions or product based commissions. You can also create subscription packs that allow you to charge for product uploads, product limits and time.
+
+**Puts you in control**
+
+As a an admin, you can use Dokan in a way where you can control everything that happens in your marketplace. Product publishing, vendor registration, subscription renewal and every other vendor activity can be re routed through you.
+
+> Get the [**Pro Version**](https://wedevs.com/dokan/?utm_source=wporg&utm_medium=cta&utm_campaign=dokan-lite) with bunch of super features, updates and scope for powerful add-ons.
 
 = Features =
 **Marketplace with Independent Stores**
 
   * Every seller gets their own store with a unique URL and branding.
-  * Show a store banner with contact details
-  * Contact seller and show the store location map. (**Pro feature**)
+  * Beautiful storefront styles with contact details and widgets
+  * Store location map on store front. (Pro feature)
 
-**Dashboard For Each Seller**
+**Frontend Dashboard For Each Seller**
 
-  * Don't need to visit the WordPress admin area.
-  * Sellers can manage their products and orders from your site frontend.
+  * WordPress admin area can be accessed only by admin.
+  * Vendors manage products, orders, withdraws everything from site frontend.
 
 **Earn From Each Sale**
 
-  * As a site owner, get a cut from each sale. That way you and your users both earn money.
-  * Take a percentage from each sale. e.g. 20% goes to site owner for every order.
-  * Per seller percentage override. Take different cut from different seller. (**Pro feature**)
+  * A part of the sale value is sent to admin as commission.
+  * Commission rate can be customized.
+  * Per vendor percentage override. (**Pro feature**)
 
 **Product Management**
 
   * Create and manage your products from the frontend.
-  * Create simple and/or variable products. (**Pro Feature**)
-  * Sellers have option to manage product shipping, attributes. (**Pro Feature**)
-  * Seller can mange downloadable product permission: expiry date and download limit. (**Pro Feature**)
+  * Create variable or downloadable products. (**Pro Feature**)
+  * Vendors have option to manage product shipping, attributes. (**Pro Feature**)
+  * Vendors can manage downloadable product permission, expiry date and download limit. (**Pro Feature**)
 
 **Reports (Pro Feature)**
 
-  * Every seller can see his/her own sales report and see a bird eye view on the sales they are making.
-  * Order overview and filter by Sale by date, Top sellers, Top earners.
-  * Export order reports
+  * Vendors can see their sales report, generate statements and overview from frontend.
+  * Admins can overview orders and filter by sale, by date, top vendors or top earners.
+  * Export order reports to CSV.
 
 **Coupon Management (Pro Feature)**
 
-  * Manage and offer discounts for each products.
+  * Manage and offer discounts for each product.
   * Set expiry and restriction for coupons.
 
 **Manage Product Reviews (Pro Feature)**
 
-  * You can manage the reviews on your products.
-  * Approve/unapprove reviews.
-  * See all the reviews for your products left by customers.
+  * All product reviews are managed by vendors (with admin override)
+  * View all reviews on products left by customers.
 
+**Pro Features Continued**
 
-= Additional Pro Features =
+*The admin panel gives you some powerful management tools*
 
-  * Admin have additional option inside of his admin panel of Dokan
-     * Admin can view and mange seller list
-     * Admin can view his as well as every seller’s earning reports individually
-     * Dokan Pro has update and support option for customer.
-     * Dokan tools option has page installer and Sync table option
-  * Settings tab has those option like-
-     * **General**
+  * Admin can view and manage vendor list
+  * Admin can view his as well as every vendor’s earning reports individually
+  * Dokan Pro has update and support option for customer.
+  * Dokan tools option has page installer and Sync table option
+  * Advanced settings for the admin -
+     * General Settings
         * Admin can enable/disable the map on the store page.
         * Admin can enable/disable the contact form on the store page
         * Admin can also enable/disable the store sidebar from theme.
-     * **Selling Options**
-        * Admin can manage new product status
-        * Admin can set the order status for withdraw
-        * Admin can seth threshold withdraw day for the seller
-        * Admin can change the seller store URL
-        * Admin can also enable/disable the permission of review editing for the seller
-  * **Widgets**
-     * Best seller widget
-     * Featured seller widget
-     * Store contact widget
-     * Store location widget
 
-And much more. Checkout the [**Pro Version**](https://wedevs.com/products/plugins/dokan/?utm_source=wporg&utm_medium=footer&utm_campaign=dokan-lite)
+     * Selling Options
+        * Admin can manage new product status.
+        * Admin can set the order status for withdraw.
+        * Admin can seth threshold withdraw day for the vendor.
+        * Admin can change the vendor store URL.
+        * Admin can also enable/disable the permission of review editing for the vendor.
+
+  * Widgets
+    * Best vendor widget
+    * Featured vendor widget
+    * Store contact widget
+    * Store location widget
+
+And much more. Checkout the [**Pro Version**](https://wedevs.com/dokan/?utm_source=wporg&utm_medium=cta&utm_campaign=dokan-lite)
+
+= Contribute =
+This may have bugs and lack of many features. If you want to contribute on this project, you are more than welcome. Please fork the repository from [Github](https://github.com/weDevsOfficial/dokan).
 
 = Author =
-Brought to you by [Tareq Hasan](http://tareq.wedevs.com) from [weDevs](http://wedevs.com)
+Brought to you by [Tareq Hasan](http://tareq.co) from [weDevs](http://wedevs.com)
 
 == Installation ==
 
@@ -124,8 +155,7 @@ A. Yes, that's how Dokan works. In every sales, you can cut a commission from a 
 A. Obviously, you can use this on a single seller site to give them a nice front-end experience.
 
 = Q. How to upgrade to the Pro version?
-A. You just delete the free version and install and activate the pro version. Nothing complicated! All your data will be safe on the database and some extra features will be added. You can even ask the support team to help you to migrate.
-
+A. Just install and activate the PRO version without deleting the free plugin. All your data will be safe on the database and some extra features will be added. If you feel something may go wrong, please consult with our [support](https://wedevs.com/contact/) staff first.
 
 == Screenshots ==
 
@@ -133,20 +163,232 @@ A. You just delete the free version and install and activate the pro version. No
 2. Withdraw requests from sellers
 3. Settings &rarr; General
 4. Settings &rarr; Selling Options
-5. Settings &rarr; Page Settings
-6. Seller Dashboard in site frontend
-7. Frontend &rarr; Products Listing
-8. Frontend &rarr; Create a new Product
-9. Frontend &rarr; Edit a product
-10. Frontend &rarr; Product &rarr; Options
-11. Frontend &rarr; Product &rarr; Inventory
+5. Settings &rarr; Withdraw Options
+6. Settings &rarr; Page Settings
+7. Settings &rarr; Appearance
+8. Seller Dashboard in site frontend
+9. Frontend &rarr; Products Listing
+10. Frontend &rarr; Create a new Product
+11. Frontend &rarr; Edit a product
 12. Frontend &rarr; Orders Listing
 13. Frontend &rarr; Orders &rarr; Details
 14. Frontend &rarr; Submit withdraw request
 15. Frontend &rarr; Store Settings
-15. Frontend &rarr; Individual Seller Store
+16. Frontend &rarr; Store Payment Settings
+17. Frontend &rarr; Individual Seller Store-1
+18. Frontend &rarr; Individual Seller Store-2
+19. Frontend &rarr; Individual Seller Store-3
 
 == Changelog ==
+
+v2.6.9 -> Oct 17, 2017
+---------------------
+- [new]  Depends on vendor commission, pricing suggession is added in new and edit product template
+- [new]  Added admin settings for showing/hiding customer info in order details page
+- [new]  Both flat and percentage commission system added for vendor
+- [new]  Added functinality for deleting vendor details when the vendor account is deleted
+- [new]  Added documentaion links in dokan settings and pages
+- [fix]  Clearing and restoring all caching issue
+- [fix]  Disabled order editing option when the order status is cancelled or refunded
+- [fix]  Product image uploading permission issue fixed
+- [fix]  Store layout breaks when the address is too long fixed
+- [fix]  Non numerical error fixed for php latest versions
+- [fix]  Fix vendor order inserting undefined notices
+
+v2.6.8 -> Sep 7, 2017
+---------------------
+- [new]   Dokan Emails now configurable from WooCommerce Email settings with theme override support
+- [new]   Canceled withdraw requests are now shown for vendor
+- [fix]   Date time format fixed for order and product listing to support global format
+- [fix]   saving variable product prices
+- [tweak] fontawesome library updated
+
+v2.6.7 -> Aug 3, 2017
+---------------------
+- [fix]   Fix multiple vendor order creating issue
+- [fix]   Disable pre defined attribute which already set with product
+
+v2.6.6 -> July 31, 2017
+---------------------
+- [fix]   Dokan Emails are not translating
+- [fix]   'No result found' text on product edit page not translating
+- [fix]   Order sync offset problem during checkout
+- [fix]   All graph rtl problem
+- [tweak] Vendor dashboard graph RTL enhanced
+- [tweak] Filter added to customize shop address
+- [tweak] Several other code enhancement and optimization
+
+v2.6.5 -> July 16, 2017
+---------------------
+- [new]   Added IBAN and Routing number fields for vendor's Bank info section
+- [new]   Added settings in admin panel to disable Vendor Welcome Wizard
+- [new]   Added filter `dokan_seller_registration_required_fields`
+- [new]   Store Category widget design updated
+- [new]   Added Dokan logo as menu icon in admin dashboard
+- [new]   Dokan Store Sidebar widget area now available for all themes
+- [fix]   Store categories are not updating properly
+- [fix]   Showing store location widget if location is not set
+- [fix]   Withdraw not working for IP address with port number
+- [tweak] Enahanced RTL support
+- [tweak] Profile Completion progress filter args updated
+
+v2.6.4 -> June 22, 2017
+---------------------
+- [fix] Store page product loop pagination not showing
+- [fix] Order exporting not working properly
+- [fix] Earning calculation date range issue
+- [tweak] Banner upload is now available in store settings for all appearances
+- [tweak] Profile completion progress custom values logic updated
+- [tweak] Downloadable product section performance tweaks
+
+v2.6.3 -> June 08, 2017
+---------------------
+- [fix] Missing text domains updated
+- [fix] Featured Seller, Best Seller and Top Seller query fixed for older version of WooCommerce
+- [fix] Translation issue fixed on withdraw template
+- [fix] Store pages template conflitcs with theme home page
+- [tweak] Various other code improvements
+
+v2.6.2 -> May 18, 2017
+---------------------
+- [new] Dynamic state select option for Vendor Setup Wizard
+- [fix] Change Product Seller from admin not working properly for variation products
+- [fix] Store listing search not showing same result if submitted
+- [fix] Store listing search sending multiple requests on AJAX
+- [fix] Feature products, Best selling products and Top rated seller queries fixed
+- [fix] Fixed Order status label issue in seller order listing
+- [tweak] Added currency argument for wc_price
+- [tweak] Various helper text labels updated
+
+v2.6.1 -> May 04, 2017
+---------------------
+- [new] Filter added `dokan_get_seller_earnings`
+- [fix] `dokan-dashboard` shortcode not rendering properly
+- [fix] Clear cache on vendor balance update
+- [fix] Order regenerate order status issue
+- [fix] Vendor wizard showing blank page
+- [fix] Downloadable product grant access issue in vendor order
+- [fix] Rating display on widget not working properly
+- [fix] Single product view sales schedule issue fixed
+- [fix] Vendor Product visibility and catalog issue fixed
+- [fix] Date range issue fixed for vendor balance
+- [tweak] Refill submitted values on error while adding new product
+- [tweak] Updated posted value handler function
+- [tweak] Hide view action on product listing if status is pending
+
+v2.6.0 -> April 18, 2017
+---------------------
+- [new] Made dokan compatible with WC 3.0
+- [new] Store listing design updated with city added
+- [tweak] Store listing banner image streched for full view
+- [fix] Variations attribute issue fixed
+- [fix] Sub-order not created for multiple seller is fixed
+- [fix] Seller dashboard product and order listing showing notices fixed
+- [fix] Seller new product add page showing notices fixed
+- [fix] Saving digital product data with WC 3.0
+- [fix] Saving variation product data with WC 3.0
+- [fix] Registration form now working with WC 3.0
+
+v2.5.7 -> March 30, 2017
+----------------------
+- [new] New design for store listing page
+- [new] Added gallery image uploader in add new product popup and page
+- [new] Added `dokan_get_seller_amount_from_order` filter
+- [fix] Shipping tracking modal issue for third-party theme conflicting
+- [fix] Dokan updater issue fixed
+- [fix] Fix store listing search
+- [fix] "More tab" checkbox saving issue on store settings
+- [fix] Some translation issue fixed in product page
+- [tweak] Remove modal js library
+- [tweak] Remove default placeholder content from product description in new product page
+- [tweak] Change required field state to country in store settings
+
+v2.5.6 -> March 16, 2017
+----------------------
+- [fix] If no withdraw limit is set then it defaults to ‘0’
+- [fix] Remove add to cart fragment filter for thirdparty theme conflicting
+- [new] Added `dokan_seller_total_sales`, `dokan_get_formatted_seller_balance` and `dokan_get_seller_balance` filter
+
+v2.5.5 -> March 13, 2017
+---------------------
+- [tweak] Enabled showing cancelled orders in case of multiple sub-orders
+- [fix] Fixed js error on my-account page
+- [fix] Fixed reports showing wrong curve
+- [fix] Text domain issue fixed
+
+v2.5.4 -> March 8, 2017
+----------------------
+- [tweak] Changed text domain from 'dokan' to 'dokan-lite'
+- [new] Added settings to turn on/off new product form pop-up
+- [new] Added schedule discount price fields in new product form template when popup settings is disabled
+- [fix] Dokan Tabs css fixed for better compatibility with all themes
+- [fix] Fixed issues with saving product types other than simple like booking/auction
+- [fix] Fixed issues with withdraw balance and status
+- [fix] Template rendering issue on Store page and Review page for vendors is fixed.
+
+v2.5.3 -> February 14, 2017
+----------------------
+- [fix] Order Tracking modal not working properly in some themes
+- [fix] Fixed showing notice on customer order table for multiple vendors
+- [fix] Fixed product listing status count issue
+- [fix] Fixed withdraw status messages and calculation
+- [tweak] Removed un-necessary codes and optimized code structure
+
+v2.5.2 -> January 25, 2017
+----------------------
+- [new]   Added filter 'dokan_new_product_popup_args' to enable custom validation on new product add
+- [new]   Enabled vendors to select all products while creating coupon
+- [fix]   On plugin activation auto flush rewrite rules
+- [fix]   Seller Setup wizard not translating properly in some cases
+- [fix]   Shipping tracking modal not showing while bootstrap loaded is fixed
+- [fix]   Vendor statement enhanced for calculating per product commission
+- [tweak] Seller setup wizard enhanced for responsiveness
+- [tweak] Seller dashboard widgets enhanced for better responsiveness
+- [tweak] Add new product pop up enhanced for better responsiveness
+- [tweak] Several other optimizations to codebase for better and stable performance
+
+v2.5.1 -> January 12, 2017
+---------------------
+- [new]   Front-End product template new UI
+- [tweak] All SELLER text is changed to VENDOR
+- [tweak] Updated Seller Earning Statement Report View
+- [tweak] Fixed variable product data saving issues
+- [tweak] Changed Order Tracking options from Select to Text box for sellers
+- [tweak] Improved Responsiveness on seller dashboard pages
+- [tweak] Product commission option is moved to advance tab from general
+- [fix]   Improved Seller Setup wizard for better UX
+- [fix]   Improved Seller Setup wizard for better UX
+- [fix]   Fixed showing error If Google MAP API is not given
+- [fix]   Fixed Extra fee receiver not working issue
+
+= v2.5 -> October 18, 2016 =
+---------------------
+- [new] Setup Wizard on Admin panel
+- [new] Setup Wizard for seller settings after new seller registration
+- [new] Multiple header templates for store template
+- [new] Added DOKAN shortcode insert button on post/page editor
+- [new] Added store search option on store listing page
+- [new] Added detailed income and withdraw statement for sellers
+- [new] Added option to choose tax and shipping receiver as admin or seller.
+- [new] Show seller payment options on user profile in back-end.
+- [tweak] Dokan store listing shortcode has more options
+- [tweak] Flat rate shipping synced with zone ID
+- [tweak] Fixed Tab view variation products
+- [tweak] Added active states in product review status filter
+- [fix] Fixed front-end variation issue for other languages
+- [fix] Fixed product add while selling is disabled for sellers
+
+= v2.4.12 -> August 08, 2016 =
+---------------------
+- [new] Product base admin commission
+- [new] Sellers coupon show on store
+- [tweak] Added Settings for gMap API key
+- [fix] Product with same sku
+- [fix] Product permalink, defaults to 'product'
+- [fix] Image upload attribute undefined issue
+- [fix] Multiple seller order mail
+- [fix] Product sku search
+- [fix] Store search by store name
 
 
 = v2.4.11 -> May 29, 2016 =
@@ -266,4 +508,5 @@ Initial version released
 
 == Upgrade Notice ==
 
-Nothing here
+= 2.6.0 =
+**Important Update** This update is compatible with WooCommerce 3.0. Make sure to backup and read full [changelog](https://docs.wedevs.com/docs/dokan/changelog/) for more details.

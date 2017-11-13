@@ -9,9 +9,6 @@ class Dokan_Installer {
 
     function do_install() {
 
-        // upgrades
-        $this->do_upgrades();
-
         // installs
         $this->user_roles();
         $this->setup_pages();
@@ -19,11 +16,24 @@ class Dokan_Installer {
         $this->create_tables();
         $this->product_design();
 
+        // does it needs any update?
+        $updater = new Dokan_Upgrade();
+        $updater->perform_updates();
+
+        if( class_exists( 'Dokan_Rewrites' )){
+            Dokan_Rewrites::init()->register_rule();
+        }
+
         flush_rewrite_rules();
 
+        $was_installed_before = get_option( 'dokan_theme_version', false );
+
         update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
-        
-        set_transient( '_dokan_welcome_page_redirect', true, 30 );
+
+        if ( ! $was_installed_before ) {
+            set_transient( '_dokan_setup_page_redirect', true, 30 );
+        }
+
     }
 
     /**
@@ -44,6 +54,7 @@ class Dokan_Installer {
             '2.1'       => 'dokan-upgrade-2.1.php',
             '2.3'       => 'dokan-upgrade-2.3.php',
             '2.4.11'    => 'dokan-upgrade-2.4.11.php',
+            '2.4.12'    => 'dokan-upgrade-2.4.12.php',
         );
 
         foreach ( $dokan_updates as $version => $path ) {
@@ -69,21 +80,22 @@ class Dokan_Installer {
     }
 
     /**
-     * Redirect to Welcome page if  transient is valid
+     * Redirect to Setup page if transient is valid
      *
-     * @since 2.4.3
+     * @since 2.5
      *
      * @return void
      */
-    public static function welcome_page_redirect( $plugin ) {
-        
-        if ( !get_transient( '_dokan_welcome_page_redirect' ) ) {
+    public static function setup_page_redirect( $plugin ) {
+
+        if ( !get_transient( '_dokan_setup_page_redirect' ) ) {
             return;
         }
         // Delete the redirect transient
-        delete_transient( '_dokan_welcome_page_redirect' );
-        
-        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-welcome' ), admin_url( 'index.php' ) ) );
+        delete_transient( '_dokan_setup_page_redirect' );
+
+        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-setup' ), admin_url( 'index.php' ) ) );
+        exit;
     }
 
     /**
@@ -120,7 +132,7 @@ class Dokan_Installer {
             $wp_roles = new WP_Roles();
         }
 
-        add_role( 'seller', __( 'Seller', 'dokan' ), array(
+        add_role( 'seller', __( 'Vendor', 'dokan-lite' ), array(
             'read'                   => true,
             'publish_posts'          => true,
             'edit_posts'             => true,
@@ -132,6 +144,7 @@ class Dokan_Installer {
             'unfiltered_html'        => true,
             'upload_files'           => true,
             'edit_shop_orders'       => true,
+            'edit_product'           => true,
             'dokandar'               => true
         ) );
 
@@ -150,19 +163,19 @@ class Dokan_Installer {
 
         $pages = array(
             array(
-                'post_title' => __( 'Dashboard', 'dokan' ),
+                'post_title' => __( 'Dashboard', 'dokan-lite' ),
                 'slug'       => 'dashboard',
                 'page_id'    => 'dashboard',
                 'content'    => '[dokan-dashboard]'
             ),
             array(
-                'post_title' => __( 'Store List', 'dokan' ),
+                'post_title' => __( 'Store List', 'dokan-lite' ),
                 'slug'       => 'store-listing',
                 'page_id'    => 'store_listing',
                 'content'    => '[dokan-stores]'
             ),
             array(
-                'post_title' => __( 'My Orders', 'dokan' ),
+                'post_title' => __( 'My Orders', 'dokan-lite' ),
                 'slug'       => 'my-orders',
                 'page_id'    => 'my_orders',
                 'content'    => '[dokan-my-orders]'
@@ -236,7 +249,7 @@ class Dokan_Installer {
     function create_withdraw_table() {
         global $wpdb;
 
-        $sql = "CREATE TABLE IF NOT EXISTS {$wpdb->dokan_withdraw} (
+        $sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dokan_withdraw` (
                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                `user_id` bigint(20) unsigned NOT NULL,
                `amount` float(11) NOT NULL,
@@ -244,7 +257,7 @@ class Dokan_Installer {
                `status` int(1) NOT NULL,
                `method` varchar(30) NOT NULL,
                `note` text NOT NULL,
-               `ip` varchar(15) NOT NULL,
+               `ip` varchar(25) NOT NULL,
               PRIMARY KEY (id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
@@ -322,6 +335,70 @@ class Dokan_Installer {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 
         dbDelta( $sql );
+    }
+
+    /**
+     * Show plugin changes from upgrade notice
+     *
+     * @since 2.5.8
+     *
+     */
+    public static function in_plugin_update_message( $args ) {
+        $transient_name = 'dokan_upgrade_notice_' . $args['Version'];
+
+        $upgrade_notice = get_transient( $transient_name );
+        if ( ! $upgrade_notice ) {
+            $response = wp_safe_remote_get( 'https://plugins.svn.wordpress.org/dokan-lite/trunk/readme.txt' );
+            if ( ! is_wp_error( $response ) && ! empty( $response['body'] ) ) {
+                $upgrade_notice = self::parse_update_notice( $response['body'], $args['new_version'] );
+                set_transient( $transient_name, $upgrade_notice, DAY_IN_SECONDS );
+            }
+        }
+
+        echo wp_kses_post( $upgrade_notice );
+    }
+
+    /**
+     * Parse upgrade notice from readme.txt file.
+     *
+     * @since 2.5.8
+     *
+     * @param  string $content
+     * @param  string $new_version
+     * @return string
+     */
+    private static function parse_update_notice( $content, $new_version ) {
+        // Output Upgrade Notice.
+        $matches        = null;
+        $regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( DOKAN_PLUGIN_VERSION ) . '\s*=|$)~Uis';
+        $upgrade_notice = '';
+
+        if ( preg_match( $regexp, $content, $matches ) ) {
+            $notices = (array) preg_split( '~[\r\n]+~', trim( $matches[2] ) );
+
+            // Convert the full version strings to minor versions.
+            $notice_version_parts  = explode( '.', trim( $matches[1] ) );
+            $current_version_parts = explode( '.', DOKAN_PLUGIN_VERSION );
+
+            if ( 3 !== sizeof( $notice_version_parts ) ) {
+                return;
+            }
+
+            $notice_version  = $notice_version_parts[0] . '.' . $notice_version_parts[1];
+            $current_version = $current_version_parts[0] . '.' . $current_version_parts[1];
+
+            // Check the latest stable version and ignore trunk.
+            if ( version_compare( $current_version, $notice_version, '<' ) ) {
+
+                $upgrade_notice .= '</p><p class="dokan-plugin-upgrade-notice">';
+
+                foreach ( $notices as $index => $line ) {
+                    $upgrade_notice .= preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line );
+                }
+            }
+        }
+
+        return wp_kses_post( $upgrade_notice );
     }
 
 }

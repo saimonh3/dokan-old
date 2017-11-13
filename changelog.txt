@@ -1,3 +1,211 @@
+v2.6.9 -> Oct 17, 2017
+---------------------
+- [new]  Depends on vendor commission, pricing suggession is added in new and edit product template
+- [new]  Added admin settings for showing/hiding customer info in order details page
+- [new]  Both flat and percentage commission system added for vendor
+- [new]  Added functinality for deleting vendor details when the vendor account is deleted
+- [new]  Added documentaion links in dokan settings and pages
+- [fix]  Clearing and restoring all caching issue
+- [fix]  Disabled order editing option when the order status is cancelled or refunded
+- [fix]  Product image uploading permission issue fixed
+- [fix]  Store layout breaks when the address is too long fixed
+- [fix]  Non numerical error fixed for php latest versions
+- [fix]  Fix vendor order inserting undefined notices
+
+v2.6.8 -> Sep 7, 2017
+---------------------
+- [new]   Dokan Emails now configurable from WooCommerce Email settings with theme override support
+- [new]   Canceled withdraw requests are now shown for vendor
+- [fix]   Date time format fixed for order and product listing to support global format
+- [fix]   saving variable product prices
+- [tweak] fontawesome library updated
+
+v2.6.7 -> Aug 3, 2017
+---------------------
+- [fix]   Fix multiple vendor order creating issue
+- [fix]   Disable pre defined attribute which already set with product
+
+v2.6.6 -> July 31, 2017
+---------------------
+- [fix]   Dokan Emails are not translating
+- [fix]   'No result found' text on product edit page not translating
+- [fix]   Order sync offset problem during checkout
+- [fix]   All graph rtl problem
+- [tweak] Vendor dashboard graph RTL enhanced
+- [tweak] Filter added to customize shop address
+- [tweak] Several other code enhancement and optimization
+
+v2.6.5 -> July 16, 2017
+---------------------
+- [new]   Added IBAN and Routing number fields for vendor's Bank info section
+- [new]   Added settings in admin panel to disable Vendor Welcome Wizard
+- [new]   Added filter `dokan_seller_registration_required_fields`
+- [new]   Store Category widget design updated
+- [new]   Added Dokan logo as menu icon in admin dashboard
+- [new]   Dokan Store Sidebar widget area now available for all themes
+- [fix]   Store categories are not updating properly
+- [fix]   Showing store location widget if location is not set
+- [fix]   Withdraw not working for IP address with port number
+- [tweak] Enahanced RTL support
+- [tweak] Profile Completion progress filter args updated
+
+v2.6.4 -> June 22, 2017
+---------------------
+- [fix] Store page product loop pagination not showing
+- [fix] Order exporting not working properly
+- [fix] Earning calculation date range issue
+- [tweak] Banner upload is now available in store settings for all appearances
+- [tweak] Profile completion progress custom values logic updated
+- [tweak] Downloadable product section performance tweaks
+
+v2.6.3 -> June 08, 2017
+---------------------
+- [fix] Missing text domains updated
+- [fix] Featured Seller, Best Seller and Top Seller query fixed for older version of WooCommerce
+- [fix] Translation issue fixed on withdraw template
+- [fix] Store pages template conflitcs with theme home page
+- [tweak] Various other code improvements
+
+v2.6.2 -> May 18, 2017
+---------------------
+- [new] Dynamic state select option for Vendor Setup Wizard
+- [fix] Change Product Seller from admin not working properly for variation products
+- [fix] Store listing search not showing same result if submitted
+- [fix] Store listing search sending multiple requests on AJAX
+- [fix] Feature products, Best selling products and Top rated seller queries fixed
+- [fix] Fixed Order status label issue in seller order listing
+- [tweak] Added currency argument for wc_price
+- [tweak] Various helper text labels updated
+
+v2.6.1 -> May 04, 2017
+---------------------
+- [new] Filter added `dokan_get_seller_earnings`
+- [fix] `dokan-dashboard` shortcode not rendering properly
+- [fix] Clear cache on vendor balance update
+- [fix] Order regenerate order status issue
+- [fix] Vendor wizard showing blank page
+- [fix] Downloadable product grant access issue in vendor order
+- [fix] Rating display on widget not working properly
+- [fix] Single product view sales schedule issue fixed
+- [fix] Vendor Product visibility and catalog issue fixed
+- [fix] Date range issue fixed for vendor balance
+- [tweak] Refill submitted values on error while adding new product
+- [tweak] Updated posted value handler function
+- [tweak] Hide view action on product listing if status is pending
+
+v2.6.0 -> April 18, 2017
+---------------------
+- [new] Made dokan compatible with WC 3.0
+- [new] Store listing design updated with city added
+- [tweak] Store listing banner image streched for full view
+- [fix] Variations attribute issue fixed
+- [fix] Sub-order not created for multiple seller is fixed
+- [fix] Seller dashboard product and order listing showing notices fixed
+- [fix] Seller new product add page showing notices fixed
+- [fix] Saving digital product data with WC 3.0
+- [fix] Saving variation product data with WC 3.0
+- [fix] Registration form now working with WC 3.0
+
+v2.5.7 -> March 30, 2017
+---------------------
+- [new] New design for store listing page
+- [new] Added gallery image uploader in add new product popup and page
+- [new] Added `dokan_get_seller_amount_from_order` filter
+- [fix] Shipping tracking modal issue for third-party theme conflicting
+- [fix] Dokan updater issue fixed
+- [fix] Fix store listing search
+- [fix] "More tab" checkbox saving issue on store settings
+- [fix] Some translation issue fixed in product page
+- [tweak] Remove modal js library
+- [tweak] Remove default placeholder content from product description in new product page
+- [tweak] Change required field state to country in store settings
+
+v2.5.6 -> March 16, 2017
+---------------------
+- [new] Added `dokan_seller_total_sales`, `dokan_get_formatted_seller_balance` and `dokan_get_seller_balance` filter
+- [fix] If no withdraw limit is set then it defaults to ‘0’
+- [fix] Remove add to cart fragment filter for thirdparty theme conflicting
+- [fix] Fixed php below v5.4 array syntax problem
+
+v2.5.5 -> March 13, 2017
+---------------------
+- [tweak] Enabled showing cancelled orders in case of multiple sub-orders
+- [fix] Fixed js error on my-account page
+- [fix] Fixed reports showing wrong curve
+- [fix] Text domain issue fixed
+
+v2.5.4 -> March 8, 2017
+---------------------
+- [tweak] Changed text domain from 'dokan' to 'dokan-lite'
+- [new] Added settings to turn on/off new product form pop-up
+- [new] Added schedule discount price fields in new product form template when popup settings is disabled
+- [fix] Dokan Tabs css fixed for better compatibility with all themes
+- [fix] Fixed issues with saving product types other than simple like booking/auction
+- [fix] Fixed issues with withdraw balance and status
+- [fix] Template rendering issue on Store page and Review page for vendors is fixed.
+
+v2.5.3 -> February 14, 2017
+---------------------
+- [fix] Order Tracking modal not working properly in some themes
+- [fix] Fixed showing notice on customer order table for multiple vendors
+- [fix] Fixed product listing status count issue
+- [fix] Fixed withdraw status messages and calculation
+- [tweak] Removed un-necessary codes and optimized code structure
+
+v2.5.2 -> January 25, 2017
+---------------------
+- [new]   Added filter 'dokan_new_product_popup_args' to enable custom validation on new product add
+- [new]   Enabled vendors to select all products while creating coupon
+- [fix]   On plugin activation auto flush rewrite rules
+- [fix]   Seller Setup wizard not translating properly in some cases
+- [fix]   Shipping tracking modal not showing while bootstrap loaded is fixed
+- [fix]   Vendor statement enhanced for calculating per product commission
+- [tweak] Seller setup wizard enhanced for responsiveness
+- [tweak] Seller dashboard widgets enhanced for better responsiveness
+- [tweak] Add new product pop up enhanced for better responsiveness
+- [tweak] Several other optimizations to codebase for better and stable performance
+
+v2.5.1 -> January 12, 2017
+---------------------
+- [new]   Front-End product template new UI
+- [tweak] All SELLER text is changed to VENDOR
+- [tweak] Updated Seller Earning Statement Report View
+- [tweak] Fixed variable product data saving issues
+- [tweak] Changed Order Tracking options from Select to Text box for sellers
+- [tweak] Improved Responsiveness on seller dashboard pages
+- [tweak] Product commission option is moved to advance tab from general
+- [fix]   Improved Seller Setup wizard for better UX
+- [fix]   Fixed showing error If Google MAP API is not given
+- [fix]   Fixed Extra fee receiver not working issue
+
+v2.5 -> October 18, 2016
+---------------------
+- [new] Setup Wizard on Admin panel
+- [new] Setup Wizard for seller settings after new seller registration
+- [new] Multiple header templates for store template
+- [new] Added DOKAN shortcode insert button on post/page editor
+- [new] Added store search option on store listing page
+- [new] Added detailed income and withdraw statement for sellers
+- [new] Added option to choose tax and shipping receiver as admin or seller.
+- [new] Show seller payment options on user profile in back-end.
+- [tweak] Dokan store listing shortcode has more options
+- [tweak] Flat rate shipping synced with zone ID
+- [tweak] Fixed Tab view variation products
+- [tweak] Added active states in product review status filter
+- [fix] Fixed front-end variation issue for other languages
+- [fix] Fixed product add while selling is disabled for sellers
+
+v2.4.12 -> August 08, 2016
+---------------------
+- [new] Product base admin commission
+- [new] Sellers coupon show on store
+- [tweak] Added Settings for gMap API key
+- [fix] Product with same sku
+- [fix] Product permalink, defaults to 'product'
+- [fix] Image upload attribute undefined issue
+- [fix] Multiple seller order mail
+- [fix] Product sku search
+- [fix] Store search by store name
 
 v2.4.11 -> May 29, 2016
 ---------------------

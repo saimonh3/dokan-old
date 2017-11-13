@@ -1,20 +1,55 @@
-Hello there,
+<?php
+/**
+ * New Product Email.
+ *
+ * An email sent to the admin when a new Product is created by vendor.
+ *
+ * @class       Dokan_Email_New_Product
+ * @version     2.6.8
+ * 
+ */
 
-A new product has been submitted to your site (%site_url%).
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
-Summary of the product:
-------------------------
+do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
-Title: %title%
-Price: %price%
-Seller: %seller_name% (%seller_url%)
-Category: %category%
+<p><?php _e( 'Hello,', 'dokan-lite' ); ?></p>
 
-The product is currently in "publish" state. So everyone can view the product.
+<p><?php _e( 'A new product is submitted to your site', 'dokan-lite' ); ?> <a href="<?php echo $data['site_url'] ?>" ><?php echo $data['site_name'] ?></a> </p>
+<p><?php _e( 'Summary of the product:', 'dokan-lite' ); ?></p>
+<hr>
+<ul>
+    <li>
+        <strong>
+            <?php _e( 'Title :', 'dokan-lite' ); ?>
+        </strong>
+        <?php printf( '<a href="%s">%s</a>', $data['product_link'], $data['product-title']  ); ?>
+    </li>
+    <li>
+        <strong>
+            <?php _e( 'Price :', 'dokan-lite' ); ?>
+        </strong>
+        <?php echo wc_price( $data['price'] ); ?>
+    </li>
+    <li>
+        <strong>
+            <?php _e( 'Vendor :', 'dokan-lite' ); ?>
+        </strong>
+        <?php 
+        printf( '<a href="%s">%s</a>', $data['seller_url'], $data['seller-name']  ); ?>
+    </li>
+    <li>
+        <strong>
+            <?php _e( 'Category :', 'dokan-lite' ); ?>
+        </strong>
+        <?php echo $data['category'] ?>
+    </li>
+    
+</ul>
+<p><?php _e( 'The product is currently in "publish" status. So, everyone can view the product.', 'dokan-lite' ); ?></p>
 
-In case it needs to be moderated:
-%product_link%
+<?php
 
----
-%site_name%
-%site_url%
+do_action( 'woocommerce_email_footer', $email );

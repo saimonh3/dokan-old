@@ -12,9 +12,9 @@ class Dokan_Category_Walker extends Walker {
         $indent = str_repeat( "\t", $depth );
 
         if ( $depth == 0 ) {
-            $output .= $indent . '<div class="sub-category">' . "\n";
+            $output .= $indent . '<ul class="children level-' . $depth . '">' . "\n";
         } else {
-            $output .= "$indent<ul class='children'>\n";
+            $output .= "$indent<ul class='children level-$depth'>\n";
         }
     }
 
@@ -22,7 +22,7 @@ class Dokan_Category_Walker extends Walker {
         $indent = str_repeat( "\t", $depth );
 
         if ( $depth == 0 ) {
-            $output .= "$indent</div> <!-- .sub-category -->\n";
+            $output .= "$indent</ul> <!-- .sub-category -->\n";
         } else {
             $output .= "$indent</ul>\n";
         }
@@ -30,12 +30,14 @@ class Dokan_Category_Walker extends Walker {
 
     function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
         extract( $args );
-        $indent = str_repeat( "\t", $depth );
+        $indent = str_repeat( "\t\r", $depth );
 
-        if ( $depth == 1 ) {
-            $output .= $indent . '<div class="sub-block">' . "\n\t" .'<h3><a href="'. get_term_link( $category ) .'">' . $category->name . '</a></h3>' . "\n";
+        if ( $depth == 0 ) {
+            $caret = $args['has_children'] ? ' <span class="caret-icon"><i class="fa fa-angle-right" aria-hidden="true"></i></span>' : '';
+            $class_name = $args['has_children'] ? ' class="has-children parent-cat-wrap"' : ' class="parent-cat-wrap"';
+            $output .= $indent . '<li' . $class_name . '><a href="'. get_term_link( $category ) .'">' . $category->name . $caret . '</a>' . "\n";
         } else {
-            $caret = $args['has_children'] ? ' <span class="caret"></span>' : '';
+            $caret = $args['has_children'] ? ' <span class="caret-icon"><i class="fa fa-angle-right" aria-hidden="true"></i></span>' : '';
             $class_name = $args['has_children'] ? ' class="has-children"' : '';
             $output .= $indent . '<li' . $class_name . '><a href="' . get_term_link( $category ) . '">' . $category->name . $caret . '</a>';
         }
@@ -45,7 +47,7 @@ class Dokan_Category_Walker extends Walker {
         $indent = str_repeat( "\t", $depth );
 
         if ( $depth == 1 ) {
-            $output .= "$indent</div><!-- .sub-block -->\n";
+            $output .= "$indent</li><!-- .sub-block -->\n";
         } else {
             $output .= "$indent</li>\n";
         }
@@ -67,7 +69,7 @@ class Dokan_Category_Widget extends WP_Widget {
      * @return void
      **/
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-category-menu', 'description' => __( 'Dokan product category menu', 'dokan' ) );
+        $widget_ops = array( 'classname' => 'dokan-category-menu', 'description' => __( 'Dokan product category menu', 'dokan-lite' ) );
         parent::__construct( 'dokan-category-menu', 'Dokan: Product Category', $widget_ops );
     }
 
@@ -110,6 +112,33 @@ class Dokan_Category_Widget extends WP_Widget {
                 echo "</ul>";
                 ?>
             </div>
+            <script>
+            ( function ( $ ) {
+
+                $( '#cat-drop-stack li.has-children' ).on( 'click', '> a span.caret-icon', function ( e ) {
+                    e.preventDefault();
+                    var self = $( this ),
+                        liHasChildren = self.closest( 'li.has-children' );
+
+                    if ( !liHasChildren.find( '> ul.children' ).is( ':visible' ) ) {
+                        self.find( 'i.fa' ).addClass( 'fa-rotate-90' );
+                        if ( liHasChildren.find( '> ul.children' ).hasClass( 'level-0' ) ) {
+                            self.closest( 'a' ).css( { 'borderBottom': 'none' } );
+                        }
+                    }
+
+                    liHasChildren.find( '> ul.children' ).slideToggle( 'fast', function () {
+                        if ( !$( this ).is( ':visible' ) ) {
+                            self.find( 'i.fa' ).removeClass( 'fa-rotate-90' );
+
+                            if ( liHasChildren.find( '> ul.children' ).hasClass( 'level-0' ) ) {
+                                self.closest( 'a' ).css( { 'borderBottom': '1px solid #eee' } );
+                            }
+                        }
+                    } );
+                } );
+            } )( jQuery );
+        </script>
         <?php
 
         echo $after_widget;
@@ -138,13 +167,13 @@ class Dokan_Category_Widget extends WP_Widget {
      **/
     function form( $instance ) {
         $instance = wp_parse_args( (array) $instance, array(
-            'title' => __( 'Product Category', 'dokan' )
+            'title' => __( 'Product Category', 'dokan-lite' )
         ) );
 
         $title = $instance['title'];
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'dokan' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'dokan-lite' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
         </p>
         <?php

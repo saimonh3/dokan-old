@@ -7,10 +7,11 @@
  * @return array
  */
 function dokan_product_seller_info( $item_data, $cart_item ) {
-    $seller_info = dokan_get_store_info( $cart_item['data']->post->post_author );
+    $seller_id =  get_post_field( 'post_author', $cart_item['data']->get_id() );
+    $seller_info = dokan_get_store_info( $seller_id );
 
     $item_data[] = array(
-        'name'  => __( 'Seller', 'dokan' ),
+        'name'  => __( 'Vendor', 'dokan-lite' ),
         'value' => $seller_info['store_name']
     );
 
@@ -18,7 +19,6 @@ function dokan_product_seller_info( $item_data, $cart_item ) {
 }
 
 add_filter( 'woocommerce_get_item_data', 'dokan_product_seller_info', 10, 2 );
-
 
 /**
  * Adds a seller tab in product single page
@@ -29,7 +29,7 @@ add_filter( 'woocommerce_get_item_data', 'dokan_product_seller_info', 10, 2 );
 function dokan_seller_product_tab( $tabs) {
 
     $tabs['seller'] = array(
-        'title'    => __( 'Seller Info', 'dokan' ),
+        'title'    => __( 'Vendor Info', 'dokan-lite' ),
         'priority' => 90,
         'callback' => 'dokan_product_seller_tab'
     );
@@ -38,7 +38,6 @@ function dokan_seller_product_tab( $tabs) {
 }
 
 add_filter( 'woocommerce_product_tabs', 'dokan_seller_product_tab' );
-
 
 /**
  * Prints seller info in product single page
@@ -49,7 +48,8 @@ add_filter( 'woocommerce_product_tabs', 'dokan_seller_product_tab' );
 function dokan_product_seller_tab( $val ) {
     global $product;
 
-    $author     = get_user_by( 'id', $product->post->post_author );
+    $author_id  = get_post_field( 'post_author', $product->get_id() );
+    $author     = get_user_by( 'id', $author_id );
     $store_info = dokan_get_store_info( $author->ID );
 
     dokan_get_template_part('global/product-tab', '', array(
@@ -57,7 +57,6 @@ function dokan_product_seller_tab( $val ) {
         'store_info' => $store_info,
     ) );
 }
-
 
 /**
  * Show sub-orders on a parent order if available
@@ -68,9 +67,9 @@ function dokan_product_seller_tab( $val ) {
 function dokan_order_show_suborders( $parent_order ) {
 
     $sub_orders = get_children( array(
-        'post_parent' => $parent_order->id,
+        'post_parent' => dokan_get_prop( $parent_order, 'id'),
         'post_type'   => 'shop_order',
-        'post_status' => array( 'wc-pending', 'wc-completed', 'wc-processing', 'wc-on-hold' )
+        'post_status' => array( 'wc-pending', 'wc-completed', 'wc-processing', 'wc-on-hold', 'wc-cancelled'  )
     ) );
 
     if ( ! $sub_orders ) {
@@ -108,3 +107,20 @@ function dokan_get_customer_main_order( $customer_orders ) {
 }
 
 add_filter( 'woocommerce_my_account_my_orders_query', 'dokan_get_customer_main_order');
+
+/**
+ * Add edit post capability to woocommerce proudct post type
+ *
+ * @since 2.6.9
+ *
+ * @param capability array
+ *
+ * @return capability array
+ */
+function dokan_manage_capability_for_woocommerce_product( $capability ) {
+    $capability['capabilities'] = array( 'edit_post' => 'edit_product' );
+    return $capability;
+}
+
+add_filter( 'woocommerce_register_post_type_product', 'dokan_manage_capability_for_woocommerce_product' );
+

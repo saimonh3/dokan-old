@@ -42,17 +42,17 @@ function dokan_content_nav( $nav_id, $query = null ) {
         <?php if ( is_single() ) : // navigation links for single posts  ?>
 
             <li class="previous">
-                <?php previous_post_link( '%link', _x( '&larr;', 'Previous post link', 'dokan' ) . ' %title' ); ?>
+                <?php previous_post_link( '%link', _x( '&larr;', 'Previous post link', 'dokan-lite' ) . ' %title' ); ?>
             </li>
             <li class="next">
-                <?php next_post_link( '%link', '%title ' . _x( '&rarr;', 'Next post link', 'dokan' ) ); ?>
+                <?php next_post_link( '%link', '%title ' . _x( '&rarr;', 'Next post link', 'dokan-lite' ) ); ?>
             </li>
 
         <?php endif; ?>
         </ul>
 
 
-        <?php if ( $wp_query->max_num_pages > 1 && ( is_home() || is_archive() || is_search() ) ) : // navigation links for home, archive, and search pages ?>
+        <?php if ( $wp_query->max_num_pages > 1 && ( dokan_is_store_page() || is_home() || is_archive() || is_search() ) ) : // navigation links for home, archive, and search pages ?>
             <?php dokan_page_navi( '', '', $wp_query ); ?>
         <?php endif; ?>
 
@@ -106,7 +106,7 @@ function dokan_page_navi( $before = '', $after = '', $wp_query ) {
     if ( $prevposts ) {
         echo '<li>' . $prevposts . '</li>';
     } else {
-        echo '<li class="disabled"><a href="#">' . __( '&larr; Previous', 'dokan' ) . '</a></li>';
+        echo '<li class="disabled"><a href="#">' . __( '&larr; Previous', 'dokan-lite' ) . '</a></li>';
     }
 
     for ($i = $start_page; $i <= $end_page; $i++) {
@@ -117,7 +117,7 @@ function dokan_page_navi( $before = '', $after = '', $wp_query ) {
         }
     }
     echo '<li class="">';
-    next_posts_link( __('Next &rarr;', 'dokan') );
+    next_posts_link( __('Next &rarr;', 'dokan-lite') );
     echo '</li>';
     if ( $end_page < $max_page ) {
         $last_page_text = "&rarr;";
@@ -131,26 +131,33 @@ endif;
 function dokan_product_dashboard_errors() {
     $type = isset( $_GET['message'] ) ? $_GET['message'] : '';
 
-    switch ($type) {
+    switch ( $type ) {
         case 'product_deleted':
-            dokan_get_template_part( 'global/dokan-success', '', array( 'deleted' => true, 'message' => __( 'Product succesfully deleted', 'dokan' ) ) );
+            dokan_get_template_part( 'global/dokan-success', '', array( 'deleted' => true, 'message' => __( 'Product succesfully deleted', 'dokan-lite' ) ) );
             break;
 
         case 'error':
-            dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' =>  __( 'Something went wrong!', 'dokan' ) ) );
+            dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' =>  __( 'Something went wrong!', 'dokan-lite' ) ) );
             break;
+
+        default:
+            do_action( 'dokan_product_dashboard_errors', $type );
+            break;
+
     }
 }
 
 function dokan_product_listing_status_filter() {
-    $permalink = dokan_get_navigation_url( 'products' );
+    $permalink    = dokan_get_navigation_url( 'products' );
     $status_class = isset( $_GET['post_status'] ) ? $_GET['post_status'] : 'all';
-    $post_counts = dokan_count_posts( 'product', get_current_user_id() );
+    $post_counts  = dokan_count_posts( 'product', get_current_user_id() );
+    $statuses     = dokan_get_post_status();
 
     dokan_get_template_part( 'products/listing-status-filter', '', array(
         'permalink'    => $permalink,
         'status_class' => $status_class,
         'post_counts'  => $post_counts,
+        'statuses'     => $statuses,
     ) );
 }
 
@@ -182,7 +189,7 @@ function dokan_order_listing_status_filter() {
                 $all_order_url = array_merge( $date_filter, array( 'order_status' => 'all' ) );
             ?>
             <a href="<?php echo ( empty( $all_order_url ) ) ? $orders_url : add_query_arg( $complete_order_url, $orders_url ); ?>">
-                <?php printf( __( 'All (%d)', 'dokan' ), $orders_counts->total ); ?></span>
+                <?php printf( __( 'All (%d)', 'dokan-lite' ), $orders_counts->total ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'wc-completed' ? ' class="active"' : ''; ?>>
@@ -196,7 +203,7 @@ function dokan_order_listing_status_filter() {
                 $complete_order_url = array_merge( array( 'order_status' => 'wc-completed' ), $date_filter );
             ?>
             <a href="<?php echo add_query_arg( $complete_order_url, $orders_url ); ?>">
-                <?php printf( __( 'Completed (%d)', 'dokan' ), $orders_counts->{'wc-completed'} ); ?></span>
+                <?php printf( __( 'Completed (%d)', 'dokan-lite' ), $orders_counts->{'wc-completed'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'wc-processing' ? ' class="active"' : ''; ?>>
@@ -210,7 +217,7 @@ function dokan_order_listing_status_filter() {
                 $processing_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-processing' ) );
             ?>
             <a href="<?php echo add_query_arg( $processing_order_url, $orders_url ); ?>">
-                <?php printf( __( 'Processing (%d)', 'dokan' ), $orders_counts->{'wc-processing'} ); ?></span>
+                <?php printf( __( 'Processing (%d)', 'dokan-lite' ), $orders_counts->{'wc-processing'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'wc-on-hold' ? ' class="active"' : ''; ?>>
@@ -224,7 +231,7 @@ function dokan_order_listing_status_filter() {
                 $on_hold_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-on-hold' ) );
             ?>
             <a href="<?php echo add_query_arg( $on_hold_order_url, $orders_url ); ?>">
-                <?php printf( __( 'On-hold (%d)', 'dokan' ), $orders_counts->{'wc-on-hold'} ); ?></span>
+                <?php printf( __( 'On-hold (%d)', 'dokan-lite' ), $orders_counts->{'wc-on-hold'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'wc-pending' ? ' class="active"' : ''; ?>>
@@ -238,7 +245,7 @@ function dokan_order_listing_status_filter() {
                 $pending_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-pending' ) );
             ?>
             <a href="<?php echo add_query_arg( $pending_order_url, $orders_url ); ?>">
-                <?php printf( __( 'Pending (%d)', 'dokan' ), $orders_counts->{'wc-pending'} ); ?></span>
+                <?php printf( __( 'Pending (%d)', 'dokan-lite' ), $orders_counts->{'wc-pending'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'wc-canceled' ? ' class="active"' : ''; ?>>
@@ -252,7 +259,7 @@ function dokan_order_listing_status_filter() {
                 $canceled_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-cancelled' ) );
             ?>
             <a href="<?php echo add_query_arg( $canceled_order_url, $orders_url ); ?>">
-                <?php printf( __( 'Cancelled (%d)', 'dokan' ), $orders_counts->{'wc-cancelled'} ); ?></span>
+                <?php printf( __( 'Cancelled (%d)', 'dokan-lite' ), $orders_counts->{'wc-cancelled'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'wc-refunded' ? ' class="active"' : ''; ?>>
@@ -266,7 +273,7 @@ function dokan_order_listing_status_filter() {
                 $refund_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-refunded' ) );
             ?>
             <a href="<?php echo add_query_arg( $refund_order_url, $orders_url ); ?>">
-                <?php printf( __( 'Refunded (%d)', 'dokan' ), $orders_counts->{'wc-refunded'} ); ?></span>
+                <?php printf( __( 'Refunded (%d)', 'dokan-lite' ), $orders_counts->{'wc-refunded'} ); ?></span>
             </a>
         </li>
 
@@ -292,26 +299,26 @@ function dokan_get_dashboard_nav() {
 
     $urls = array(
         'dashboard' => array(
-            'title' => __( 'Dashboard', 'dokan'),
+            'title' => __( 'Dashboard', 'dokan-lite'),
             'icon'  => '<i class="fa fa-tachometer"></i>',
             'url'   => dokan_get_navigation_url(),
             'pos'   => 10
         ),
         'products' => array(
-            'title' => __( 'Products', 'dokan'),
+            'title' => __( 'Products', 'dokan-lite'),
             'icon'  => '<i class="fa fa-briefcase"></i>',
             'url'   => dokan_get_navigation_url( 'products' ),
             'pos'   => 30
         ),
         'orders' => array(
-            'title' => __( 'Orders', 'dokan'),
+            'title' => __( 'Orders', 'dokan-lite'),
             'icon'  => '<i class="fa fa-shopping-cart"></i>',
             'url'   => dokan_get_navigation_url( 'orders' ),
             'pos'   => 50
         ),
 
         'withdraw' => array(
-            'title' => __( 'Withdraw', 'dokan'),
+            'title' => __( 'Withdraw', 'dokan-lite'),
             'icon'  => '<i class="fa fa-upload"></i>',
             'url'   => dokan_get_navigation_url( 'withdraw' ),
             'pos'   => 70
@@ -319,7 +326,7 @@ function dokan_get_dashboard_nav() {
     );
 
     $settings = array(
-        'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
+        'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan-lite'),
         'icon'  => '<i class="fa fa-cog"></i>',
         'url'   => dokan_get_navigation_url( 'settings/store' ),
         'pos'   => 200,
@@ -327,19 +334,19 @@ function dokan_get_dashboard_nav() {
 
     $settings_sub = array(
         'back' => array(
-            'title' => __( 'Back to Dashboard', 'dokan'),
+            'title' => __( 'Back to Dashboard', 'dokan-lite'),
             'icon'  => '<i class="fa fa-long-arrow-left"></i>',
             'url'   => dokan_get_navigation_url(),
             'pos'   => 10
         ),
         'store' => array(
-            'title' => __( 'Store', 'dokan'),
+            'title' => __( 'Store', 'dokan-lite'),
             'icon'  => '<i class="fa fa-university"></i>',
             'url'   => dokan_get_navigation_url( 'settings/store' ),
             'pos'   => 30
         ),
         'payment' => array(
-            'title' => __( 'Payment', 'dokan'),
+            'title' => __( 'Payment', 'dokan-lite'),
             'icon'  => '<i class="fa fa-credit-card"></i>',
             'url'   => dokan_get_navigation_url( 'settings/payment' ),
             'pos'   => 50
@@ -406,11 +413,13 @@ function dokan_dashboard_nav( $active_menu = '' ) {
         $menu .= sprintf( '<li class="%s"><a href="%s">%s %s</a></li>', $class, $item['url'], $item['icon'], $item['title'] );
     }
 
-    $menu .= '<li class="dokan-common-links dokan-clearfix">
-            <a title="' . __( 'Visit Store', 'dokan' ) . '" class="tips" data-placement="top" href="' . dokan_get_store_url( get_current_user_id()) .'" target="_blank"><i class="fa fa-external-link"></i></a>
-            <a title="' . __( 'Edit Account', 'dokan' ) . '" class="tips" data-placement="top" href="' . dokan_get_navigation_url( 'edit-account' ) . '"><i class="fa fa-user"></i></a>
-            <a title="' . __( 'Log out', 'dokan' ) . '" class="tips" data-placement="top" href="' . wp_logout_url( site_url() ) . '"><i class="fa fa-power-off"></i></a>
+    $common_links = '<li class="dokan-common-links dokan-clearfix">
+            <a title="' . __( 'Visit Store', 'dokan-lite' ) . '" class="tips" data-placement="top" href="' . dokan_get_store_url( get_current_user_id()) .'" target="_blank"><i class="fa fa-external-link"></i></a>
+            <a title="' . __( 'Edit Account', 'dokan-lite' ) . '" class="tips" data-placement="top" href="' . dokan_get_navigation_url( 'edit-account' ) . '"><i class="fa fa-user"></i></a>
+            <a title="' . __( 'Log out', 'dokan-lite' ) . '" class="tips" data-placement="top" href="' . wp_logout_url( home_url() ) . '"><i class="fa fa-power-off"></i></a>
         </li>';
+
+    $menu .= apply_filters( 'dokan_dashboard_nav_common_link', $common_links );
 
     $menu .= '</ul>';
 
@@ -485,8 +494,6 @@ function dokan_store_category_delete_transient( $post_id ) {
 add_action( 'delete_post', 'dokan_store_category_delete_transient' );
 add_action( 'save_post', 'dokan_store_category_delete_transient' );
 
-
-
 function dokan_seller_reg_form_fields() {
     $postdata = $_POST;
     $role = isset( $postdata['role'] ) ? $postdata['role'] : 'customer';
@@ -499,7 +506,7 @@ function dokan_seller_reg_form_fields() {
     ) );
 }
 
-add_action( 'register_form', 'dokan_seller_reg_form_fields' );
+add_action( 'woocommerce_register_form', 'dokan_seller_reg_form_fields' );
 
 if ( !function_exists( 'dokan_seller_not_enabled_notice' ) ) :
 
@@ -554,7 +561,6 @@ function dokan_myorder_login_check(){
     }
 }
 
-
  /**
  * Displays the store lists
  *
@@ -565,8 +571,6 @@ function dokan_myorder_login_check(){
  * @return string
  */
 function dokan_store_listing( $atts ) {
-    global $post;
-
     /**
      * Filter return the number of store listing number per page.
      *
@@ -576,9 +580,10 @@ function dokan_store_listing( $atts ) {
      */
     $attr = shortcode_atts( apply_filters( 'dokan_store_listing_per_page', array(
         'per_page' => 10,
-        'search'   => 'yes'
+        'search'   => 'yes',
+        'per_row'  => 3,
+        'featured'  => 'no'
     ) ), $atts );
-
     $paged   = max( 1, get_query_var( 'paged' ) );
     $limit   = $attr['per_page'];
     $offset  = ( $paged - 1 ) * $limit;
@@ -591,11 +596,29 @@ function dokan_store_listing( $atts ) {
     // if search is enabled, perform a search
     if ( 'yes' == $attr['search'] ) {
         $search_term = isset( $_GET['dokan_seller_search'] ) ? sanitize_text_field( $_GET['dokan_seller_search'] ) : '';
-
         if ( '' != $search_term ) {
-            $seller_args['search']         = $search_term;
-            $seller_args['search_columns'] = array( 'user_login', 'user_nicename', 'display_name');
+
+            $seller_args['meta_query'] = array(
+                array(
+                    'key'     => 'dokan_enable_selling',
+                    'value'   => 'yes',
+                    'compare' => '='
+                ),
+                 array(
+                    'key'     => 'dokan_store_name',
+                    'value'   => $search_term,
+                    'compare' => 'LIKE'
+                )
+            );
         }
+    }
+
+    if ( $attr['featured'] == 'yes' ) {
+        $seller_args['meta_query'][] = array(
+                                        'key'     => 'dokan_feature_seller',
+                                        'value'   => 'yes',
+                                        'compare' => '='
+                                    );
     }
 
     $sellers = dokan_get_sellers( apply_filters( 'dokan_seller_listing_args', $seller_args ) );
@@ -610,10 +633,10 @@ function dokan_store_listing( $atts ) {
         'limit'      => $limit,
         'offset'     => $offset,
         'paged'      => $paged,
-        'image_size' => 'medium',
-        'search'     => $attr['search']
+        'image_size' => 'full',
+        'search'     => $attr['search'],
+        'per_row'    => $attr['per_row']
     ) );
-
     ob_start();
     dokan_get_template_part( 'store-lists', false, $template_args );
     $content = ob_get_clean();
